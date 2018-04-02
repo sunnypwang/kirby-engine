@@ -1,0 +1,3 @@
+obj_kirby.hspeed
+obj_kirby.bbox_left
+obj_kirby.bbox_right

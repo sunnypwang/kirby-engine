@@ -1,0 +1,189 @@
+//horizontal control
+//dash control
+if(alarm[1]>0 and alarm[1] < DASH_TIMER){
+    if((hspeed > 0 and keyboard_check_pressed(vk_right)) 
+    or (hspeed < 0 and keyboard_check_pressed(vk_left))) dashing=1
+}
+
+//keyboard control
+if(keyboard_check(vk_left)){
+    alarm[1]=DASH_TIMER 
+    if(hspeed > 0){
+        hspeed -= SKID_DECEL
+        sprite_index = spr_kirby_skid
+    } else {   
+        //if dashing, run.
+        if(dashing){
+        sprite_index = spr_kirby_run
+        hspeed = -RUN_SPD
+        image_speed = 0.8
+        }
+        //if not dashing, walk.
+        else {
+        sprite_index = spr_kirby_walk
+        hspeed = -WALK_SPD
+        image_speed = 0.5
+        } 
+        image_xscale = -1
+    }
+}else if(keyboard_check(vk_right)){
+    alarm[1]=DASH_TIMER  
+    if(hspeed < 0){
+        hspeed += SKID_DECEL
+        sprite_index = spr_kirby_skid
+    } else {
+        //if dashing, run.
+        if(dashing){
+        sprite_index = spr_kirby_run
+        hspeed = RUN_SPD
+        image_speed = 0.8
+        }
+        //if not dashing, walk.
+        else {
+        sprite_index = spr_kirby_walk
+        hspeed = WALK_SPD
+        image_speed = 0.5
+        }
+        image_xscale = 1
+    }
+}
+if(hspeed > 0){
+    hspeed -= (DECEL)
+    if (hspeed < 0) hspeed = 0
+} else if (hspeed < 0){
+    hspeed += (DECEL)
+    if (hspeed > 0) hspeed = 0
+} else {
+sprite_index = spr_kirby_still
+image_speed = 0
+image_index = 5
+}
+
+//-------------------------
+//vertical control
+//-------------------------
+//keyboard control
+if(keyboard_check_pressed(vk_space)){
+    vspeed = -JUMP_SPEED
+    grav=0.2
+}
+if(vspeed < 0 and not keyboard_check(vk_space)){
+    vspeed *= JUMP_DECEL
+}
+vspeed += grav
+if (vspeed > VSPEEDMAX) vspeed = VSPEEDMAX
+//if (vspeed < -VSPEEDMAX) vspeed = -VSPEEDMAX
+
+
+
+
+
+
+//vertical collision check
+
+/*if((vspeed > 0 and 
+collision_rectangle(bbox_left+4, bbox_bottom-4, bbox_right-4, bbox_bottom, obj_solid,true,true))
+or (vspeed < 0 and
+collision_rectangle(bbox_left+4, bbox_top, bbox_right-4, bbox_top+4, obj_solid,true,true))
+){
+    vspeed = 0
+    grav=0
+    
+}
+if (not vspeed < 0 and collision_rectangle(bbox_left+4,bbox_bottom-4,bbox_right-4,bbox_bottom,obj_solid,1,1))
+{
+    grav = 0
+    vspeed = 0
+    while collision_rectangle(bbox_left+4,bbox_bottom,bbox_right-4,bbox_bottom,obj_solid,1,1)
+        y-=1
+}*/
+
+if(vspeed < 0 and collision_rectangle(bbox_left+4, bbox_top, bbox_right-4, bbox_top+4, obj_solid,true,true))
+{
+    vspeed = 0
+    while collision_rectangle(bbox_left+4,bbox_top+2,bbox_right-4,bbox_top+2,obj_solid,1,1)
+        y+=1
+}
+//horizontal collision check
+
+/*if(
+((hspeed < 0) and
+(collision_rectangle(bbox_left+2, bbox_top+4, bbox_left+6, bbox_bottom-4,obj_solid,true,true)))        
+or ((hspeed > 0) and 
+(collision_rectangle(bbox_right-6, bbox_top+4, bbox_right-2, bbox_bottom-4,obj_solid,true,true)))
+){*/
+if (hspeed > 0) {
+    if collision_rectangle(bbox_right,bbox_top+8,floor(bbox_right+2)+hspeed,bbox_bottom-3,obj_solid,1,1){
+        hspeed = 0
+        dashing = 0
+        sprite_index = spr_kirby_still
+        image_speed = 0
+        image_index = 5
+    }
+}
+if (hspeed < 0) {
+    if collision_rectangle(ceil(bbox_left-2)+hspeed,bbox_top+6,bbox_left,bbox_bottom-3,obj_solid,1,1){
+        hspeed = 0
+        dashing = 0
+        sprite_index = spr_kirby_still
+        image_speed = 0
+        image_index = 5  
+    }
+}
+hspeed = round(hspeed*1000)/1000
+x = round(x*1000)/1000
+
+
+
+
+/*
+if(state == STILL_STATE){
+    sprite_index = spr_kirby_still
+    image_speed = 0
+    image_index = 5
+}
+if(state == WALKING_STATE){
+    alarm[1]=DASH_TIMER 
+    if(keyboard_check(vk_left)){
+        if(hspeed > 0){
+            hspeed -= SKID_DECEL
+            state = SKIDDING_STATE            
+        }
+        hspeed = -WALK_SPD
+        image_xscale = -1
+    } else if (keyboard_check(vk_right)) {
+        if(hspeed < 0){
+            hspeed += SKID_DECEL
+            state = SKIDDING_STATE            
+        }    
+        hspeed = WALK_SPD
+        image_xscale = 1
+    }
+    sprite_index = spr_kirby_walk
+    image_speed = 0.5
+}if(state == RUNNING_STATE){
+    alarm[1]=DASH_TIMER 
+    if(keyboard_check(vk_left)){
+        if(hspeed > 0){
+            hspeed -= SKID_DECEL
+            state = SKIDDING_STATE            
+        }
+        hspeed = -RUN_SPD
+        image_xscale = -1
+    } else if (keyboard_check(vk_right)) {
+        if(hspeed < 0){
+            hspeed += SKID_DECEL
+            state = SKIDDING_STATE            
+        }
+        hspeed = RUN_SPD
+        image_xscale = 1
+    }
+    sprite_index = spr_kirby_run
+    image_speed = 0.8
+}if(state == SKIDDING_STATE){
+    sprite_index = spr_kirby_skid
+}if(state == JUMPING_STATE){
+
+}
+*/
+

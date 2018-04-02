@@ -1,0 +1,14 @@
+/*if y < other.y-27 and vspeed > 0
+{
+y = other.y-32
+vspeed = 0
+grav = 0
+}
+/*if hspeed = 0
+state = 0
+else
+state = 1
+if jumpnow = 2
+jumpnow = 0
+hitpoint = 0
+}*/
