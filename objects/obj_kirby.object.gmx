@@ -30,9 +30,15 @@
 //Platforming constants
 WALK_SPD = 4
 DASH_SPD = 6
-DASH_TIMER = 6
+SLIDING_SPD = 10
+FLOAT_SPD = 6
+BOUNCE_SPD = 8  //can go up 1 block
+
 GRAV = 1
 VSP_MAX = 8
+
+FLOAT_GRAV = 0.5
+VSP_MAX_FLOAT = 2
 
 JUMP_SPD = 14
 JUMP_DECEL = 2
@@ -41,21 +47,24 @@ ACCELERATION = 1
 DECELERATION = 0.5
 SKID_DECELERATION = 1
 
-BOUNCE_SPD = 8  //can go up 1 block
 
-VSP_MAX_FLOAT = 2
-FLOAT_GRAV = 0.5
-FLOAT_SPD = 6
+//Platforming timer constants
+DASH_TIMER = 6
+
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
 SMALL_GAP_OFFSET = 4 //use for snapping when jumping through small gaps
 
+
 //Animation constants
+PUFFING_TIMER = 10
 UPDATE_FALLING_TIMER = 20
+
 
 //Animation variables
 loop_animation = true
+
 
 //Platforming variables
 hsp=0
@@ -72,6 +81,8 @@ dashing = 0
 floating = 0
 falling = 0
 puffing = 0
+ducking = 0
+sliding = 0
 
 bouncing = 0
 can_bounce = 0
@@ -80,6 +91,7 @@ is_dead = false
 
 //health system
 hp=3
+
 
 /*
 //platforming state constants
@@ -277,7 +289,7 @@ is_moving = (move != 0)
 is_moving_same_dir_again = (sign(last_dir) == sign(move_pulse))
 
 
-if (is_moving){
+if (is_moving and not sliding){
     dir = move
 }
 
@@ -309,7 +321,7 @@ if (vsp &gt;= 0 and collision_rectangle(bbox_left,bbox_bottom,bbox_right,bbox_bo
 
 
 //Dashing logic
-if (is_moving){
+if (is_moving and not sliding){
 
     //If player move again in the same direction when on ground and alarm not off, make him dash
     if(on_ground and not floating){
@@ -326,7 +338,7 @@ if (is_moving){
 }
 
 //Horizontal speed logic
-if(is_moving){  
+if(is_moving and not sliding){  
     //Determine max speed
     if(dashing){
         max_hsp = DASH_SPD
@@ -349,14 +361,15 @@ if(is_moving){
 else {
     //when player stop moving, decelerate to zero
     if(hsp &gt; 0) {                    
-        hsp -= DECELERATION;
-        if(hsp &lt; 0) hsp = 0;
+        hsp -= DECELERATION
+        if(hsp &lt; 0) hsp = 0
     } else if (hsp &lt; 0) {
-        hsp += DECELERATION;
-        if(hsp &gt; 0) hsp = 0;
+        hsp += DECELERATION
+        if(hsp &gt; 0) hsp = 0
     }
     skidding = 0
 }
+
 
 //Update vsp with GRAV
 if(floating) vsp = min(vsp + FLOAT_GRAV, VSP_MAX_FLOAT)
@@ -372,7 +385,7 @@ if ((key_just_jump) and (jumping or falling or floating) and not bouncing){
 }
 
 //Jumping
-if (on_ground and not floating){
+if (on_ground and not floating and not sliding){
     if(key_just_jump){
         vsp = -JUMP_SPD
         jumping = 1
@@ -417,10 +430,18 @@ if(falling){
 }
 
 
+//Ducking
+if (on_ground and not floating and not falling and not bouncing and not is_moving and not sliding and key_down){
+    ducking = 1
+} else {
+    ducking = 0
+}
 
 
-
-
+//Sliding
+if(falling or hsp == 0){
+    sliding = 0
+}
 
 
 
@@ -550,11 +571,15 @@ if(vsp &lt; 0 and not keyboard_check(vk_space)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Action (puffing, attacking)
+            <string>///Action Button (puffing, sliding, attacking)
 if(key_just_primary){
     //if floating, return to normal state
     if(floating and not puffing){
         event_user(0)   //Puffing event
+    }
+    
+    if(ducking and not sliding){
+        event_user(1)   //Sliding event
     }
 }
 
@@ -679,7 +704,7 @@ if(vsp != 0 and place_meeting(x,floor(y+vsp),obj_solid)){
             y += sign(vsp) //pixel-perfect snap
         }
         
-        event_user(1)
+        event_user(14)
         
         vsp = 0
     }  
@@ -911,7 +936,7 @@ instance_destroy()
         </arguments>
       </action>
     </event>
-    <event eventtype="7" enumb="11">
+    <event eventtype="7" enumb="24">
       <action>
         <libid>1</libid>
         <id>603</id>
@@ -957,6 +982,31 @@ if(not can_bounce and not bouncing){
         </arguments>
       </action>
     </event>
+    <event eventtype="7" enumb="11">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sliding event
+sliding = 1
+hsp = dir * SLIDING_SPD
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="7" enumb="10">
       <action>
         <libid>1</libid>
@@ -978,7 +1028,7 @@ if(not can_bounce and not bouncing){
 
 //This event is called when puffing can occur (press action after floating)
 //set timer for puffing to go off
-alarm[1] = 13
+alarm[1] = PUFFING_TIMER
 //activate puffing state
 puffing = 1
 //deactivate states
@@ -1011,11 +1061,13 @@ instance_create(x,y,obj_puff)
           <argument>
             <kind>1</kind>
             <string>///Switch case
-
+loop_animation = true
 switch(sprite_index){
+    case spr_kirby_puff: loop_animation = false; break;
+    case spr_kirby_fall1: image_index = image_number - 2; break;
     case spr_kirby_fall2: loop_animation = false; break;
     case spr_kirby_bounce : loop_animation = false; break;
-    default: loop_animation = true //do nothing
+    default:  //do nothing
 }
 
 //run this animation once
@@ -1077,11 +1129,14 @@ if(not instance_exists(obj_camera)){
 //Kirby sprite is determined by his current state, the default state is STILL state
 
 image_xscale = dir
+last_sprite = sprite_index
 
 if (puffing){
     sprite_index = spr_kirby_puff
-    image_speed = 0
-    image_index = int64(alarm[1] &lt; 3)
+    image_speed = 0.2
+} else if (sliding){
+    sprite_index = spr_kirby_slide
+    image_speed = 1
 } else if (floating){    
     sprite_index = spr_kirby_float
     image_speed = 0.2
@@ -1090,7 +1145,7 @@ if (puffing){
     image_speed = 1
 } else if (bouncing) {
     sprite_index = spr_kirby_bounce
-    image_speed = 0.25
+    image_speed = 1
 } else if (falling) {
     if(alarm[2] &gt; 0)
         sprite_index = spr_kirby_fall1
@@ -1098,19 +1153,29 @@ if (puffing){
         sprite_index = spr_kirby_fall2
 
     //if(loop_animation) 
-    image_speed = 0.5
+    image_speed = 1
     
 } else if (skidding){
     sprite_index = spr_kirby_skid
     image_speed = 1
+} else if(ducking) {
+    sprite_index = spr_kirby_duck
+    image_speed = 0
 } else if(is_moving or hsp != 0){
     if(dashing) sprite_index = spr_kirby_run          
     else sprite_index = spr_kirby_walk
     image_speed = 0.5
 } else {
-    sprite_index = spr_kirby_still
+    if(last_sprite == spr_kirby_slide){
+        sprite_index = spr_kirby_slide2
+    }
+    else sprite_index = spr_kirby_still   
     image_speed = 0
 }
+
+//Reset index if sprite changed
+if(last_sprite != sprite_index)
+image_index = 0
 
 /*
 
@@ -1177,17 +1242,18 @@ if(floating){
 draw_self()
 
 //Debug stuffs
-draw_debug_text(hsp,vsp,on_ground,falling,alarm[2])
+draw_debug_text(hsp,vsp,on_ground,falling,ducking)
 
 state = ''
 
 if(dashing) state += ' D'
 if(jumping) state += ' J'
 if(floating) state += ' F'
-
+if(sliding) state += ' S'
 if(skidding) state += ' s'
 if(bouncing) state += ' b'
 if(falling) state += ' f'
+if(ducking) state += ' d'
 
 draw_set_colour(c_black)
 draw_text_transformed(x-16,y-32,state,2,2,0)

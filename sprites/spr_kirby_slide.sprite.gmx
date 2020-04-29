@@ -8,8 +8,8 @@
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
   <bbox_left>14</bbox_left>
-  <bbox_right>63</bbox_right>
-  <bbox_top>44</bbox_top>
+  <bbox_right>67</bbox_right>
+  <bbox_top>32</bbox_top>
   <bbox_bottom>63</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
@@ -20,6 +20,6 @@
   <width>80</width>
   <height>64</height>
   <frames>
-    <frame index="0">images\spr_kirby_fall3_0.png</frame>
+    <frame index="0">images\spr_kirby_slide_0.png</frame>
   </frames>
 </sprite>

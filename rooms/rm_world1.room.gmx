@@ -56,7 +56,7 @@
     <instance objName="obj_solid" x="0" y="0" name="inst_609BDBA8" locked="0" code="" scaleX="1" scaleY="15" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="0" y="448" name="inst_CD83F16C" locked="0" code="" scaleX="26" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="832" y="0" name="inst_C62E219E" locked="0" code="" scaleX="1" scaleY="15" colour="4294967295" rotation="0"/>
-    <instance objName="obj_hub_door" x="160" y="384" name="inst_19040355" locked="0" code="linked_room = rm_test&#xA;" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_hub_door" x="160" y="384" name="inst_19040355" locked="0" code="linked_room = rm_test" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_init_room" x="64" y="64" name="inst_98587447" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>

@@ -20,15 +20,17 @@
       <sprite>sprites\spr_kirby_run</sprite>
       <sprite>sprites\spr_kirby_jump</sprite>
       <sprite>sprites\spr_kirby_fall1</sprite>
+      <sprite>sprites\spr_kirby_fall_full</sprite>
       <sprite>sprites\spr_kirby_fall2</sprite>
       <sprite>sprites\spr_kirby_bounce</sprite>
-      <sprite>sprites\spr_kirby_1</sprite>
-      <sprite>sprites\spr_kirby_fall3</sprite>
+      <sprite>sprites\spr_kirby_duck</sprite>
       <sprite>sprites\spr_kirby_skid</sprite>
       <sprite>sprites\spr_kirby_float</sprite>
       <sprite>sprites\spr_kirby_float_still</sprite>
       <sprite>sprites\spr_kirby_dead</sprite>
       <sprite>sprites\spr_kirby_puff</sprite>
+      <sprite>sprites\spr_kirby_slide</sprite>
+      <sprite>sprites\spr_kirby_slide2</sprite>
       <sprite>sprites\spr_puff</sprite>
       <sprite>sprites\spr_effect1</sprite>
     </sprites>
