@@ -25,11 +25,7 @@
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>view_hview[0] = global.game_screen_height
-view_wview[0] = global.game_screen_width
-view_hport[0] = global.game_screen_height
-view_wport[0] = global.game_screen_width
-</string>
+            <string></string>
           </argument>
         </arguments>
       </action>
@@ -75,6 +71,22 @@ view_wport[0] = global.game_screen_width
           <argument>
             <kind>1</kind>
             <string>room_speed = global.game_speed
+
+view_wview[0] = global.game_screen_width
+view_hview[0] = global.game_screen_height
+
+//view_xview[0] = obj_kirby.x - 32
+//view_yview[0] = obj_kirby.y - 16
+view_object[0] = obj_kirby
+
+view_wport[0] = global.game_screen_width
+view_hport[0] = global.game_screen_height
+
+///Set view border 
+//how far away before view start to move
+
+view_hborder[0] = view_wport[0]/2 - 2*global.tile_size
+view_vborder[0] = view_hport[0]/2 - 2*global.tile_size
 
 show_debug_message('Display :' + string(display_get_width()) + string(display_get_height()))
 show_debug_message('Window :' + string(window_get_width()) + string(window_get_height()))

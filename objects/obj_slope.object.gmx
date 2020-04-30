@@ -68,7 +68,7 @@ SLOPE_RATIO = 0;
           <argument>
             <kind>1</kind>
             <string>/// Create appropiate slope managing object
-instance_create(x,y+32,obj_slope_end);
+instance_create(x,y+global.tile_size,obj_slope_end);
 </string>
           </argument>
         </arguments>

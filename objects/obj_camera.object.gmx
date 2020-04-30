@@ -81,7 +81,7 @@ if(instance_exists(obj_kirby)){
             <string>///Kill player if fall off-screen
 if(instance_exists(obj_kirby)){
     if(obj_kirby.y &gt; (room_height + global.tile_size)){
-        with obj_kirby event_user(15)
+        with obj_kirby event_user(15)   //kill player
     }
 }
 </string>
@@ -106,12 +106,7 @@ if(instance_exists(obj_kirby)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Set view border 
-//how far away before view start to move
-
-view_hborder[0] = view_wview[0]/2 - 2*global.tile_size
-view_vborder[0] = view_hview[0]/2 - 2*global.tile_size
-</string>
+            <string></string>
           </argument>
         </arguments>
       </action>

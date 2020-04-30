@@ -26,8 +26,8 @@
           <argument>
             <kind>1</kind>
             <string>dir = obj_kirby.dir
-hspeed = 8 * dir
-depth = -1
+hspeed = dir * 8 + obj_kirby.hsp
+depth = obj_kirby.depth - 1
 //sprite_subimg_number = sprite_get_number(sprite_index)
 //alarm[0] = 2 * sprite_subimg_number
 </string>

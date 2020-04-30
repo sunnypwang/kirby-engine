@@ -1,32 +1,17 @@
-#define EnemyCreate
-///EnemyCreate(spd,hp)
+///CollisionPhysics()
 
-WALK_SPD = argument[0]
-MAX_HP = argument[1]
-
-vsp = 0
-dir = image_xscale
-hsp = dir * WALK_SPD
-grav = global.grav
-VSP_MAX = global.vsp_max
-hp = MAX_HP
-
-depth = global.enemy_depth
-
-FEET_OFFSET = bbox_bottom - bbox_top + 1
-
-#define EnemyVerticalCollision
-///EnemyGravity()
-
-vsp = min(vsp + grav,VSP_MAX)
-hsp = dir * WALK_SPD
+//Slope Collision
+//  All slope objects are inherited from obj_slope
 
 //slope vertical collision
-if(vsp != 0 and position_meeting(x,floor(bbox_bottom+vsp),obj_slope)){      //if moving and colliding with slope in direction moving
+if(vsp!= 0 and position_meeting(x,floor(bbox_bottom+vsp),obj_slope)){      //if moving and colliding with slope in direction moving
      while(!position_meeting(x,bbox_bottom+sign(vsp),obj_slope)){   //move in 1 pixel until contact
          y += sign(vsp);
      }
+     
+     event_user(14)
      vsp = 0
+     //show_debug_message('ON SLOPE')
 }
 
 //walking on slope collision
@@ -77,6 +62,8 @@ if (slope_up_inst != noone){    //if yes it will be that slope object id
             newy = slope_down_inst.y - player_y_above_offset - rel_x;
             //y = floor(newy)
             slope_y_offset = newy - y
+        } else {
+            abcdef=1
         }
     }
     
@@ -85,68 +72,55 @@ if (slope_up_inst != noone){    //if yes it will be that slope object id
 //If player is falling and about to collide with solidtop (but not solid)
 if(vsp >= 0){
     var solidtop = collision_rectangle(bbox_left,bbox_bottom,bbox_right,bbox_bottom+vsp,obj_solidtop,0,1)
+    //if (solidtop or position_meeting(x,y+FEET_OFFSET+1,obj_slope)) //if standing on ground
+    //{
+        
         //check if it is solidtop but not solid
         if(solidtop and solidtop.object_index != obj_solid){ 
             // set player on top of solidtop and set vertical speed to zero
             y = solidtop.y - sprite_get_height(solidtop.sprite_index) 
+            
+            event_user(14)
             vsp = 0
         }
+        //if(solidtop) show_debug_message(solidtop.object_index)
+    //}
 }
 
 //vertical collision with solid
 if(vsp != 0 and place_meeting(x,floor(y+vsp),obj_solid)){
-    while(!place_meeting(x,y+sign(vsp),obj_solid)){
-        y += sign(vsp) //pixel-perfect snap
-    }
-    vsp = 0 
-}
 
+    //snap to wall when falling/rising very near to vertical walls
+    //this make it easier to jump through small gap
+    for(i=SMALL_GAP_OFFSET; i>0; i-=1){
+        if(vsp < 0 and !place_meeting(x+i,floor(y+vsp),obj_solid)){        
+            x += i
+            break
+        } else if(vsp < 0 and !place_meeting(x-i,floor(y+vsp),obj_solid)){
+            x -= i
+            break
+        }
+    }
+    
+    if (place_meeting(x,floor(y+vsp),obj_solid)){
+        //handle normally
+        while(!place_meeting(x,y+sign(vsp),obj_solid)){
+            y += sign(vsp) //pixel-perfect snap
+        }
+        
+        event_user(14)
+        vsp = 0
+    }  
+}
 y += slope_y_offset
 y = floor(y+vsp)
 
-#define EnemyHorizontalCollision
-//EnemyHorizontalCollision()
-
-//turnwall = argument[0]
-//turnenemy = argument[1]
-
-//turn wall
+//horizontal collision with solid
 if(hsp != 0 and place_meeting(floor(x+hsp),y,obj_solid)){
     while(not place_meeting(x+sign(hsp),y,obj_solid)){
         x = x+sign(hsp) //pixel-perfect snap
     }
-    
     hsp = 0
-    dir = -dir
-    
 }
-
-
-//turn enemy
-if(hsp != 0 and place_meeting(floor(x+hsp),y,obj_enemyparent)){
-    while(not place_meeting(x+sign(hsp),y,obj_enemyparent)){
-        x = x+sign(hsp) //pixel-perfect snap
-    }
-    
-    hsp = 0
-    dir = -dir
-    
-}
-
 x = floor(x+hsp)
-
-//enemy = collision_rectangle(bbox_left,bbox_top,bbox_right,bbox_bottom,obj_enemyparent,0,1)
-/*
-enemy = instance_place(x,y,obj_enemyparent)
-if(enemy != noone){
-    hsp = -hsp
-    dir = -dir
-    if(dir == 1){
-        x = enemy.bbox_right + abs(sprite_xoffset)
-    } else {
-        x = enemy.bbox_left - abs(sprite_width - sprite_xoffset)
-    }
-    
-}
-*/
 
