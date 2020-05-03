@@ -7,7 +7,7 @@ InitPlatforming()
 
 InitRendering()
 
-
+InitControlButton()
 
 #define InitGameSetting
 global.game_speed = 30

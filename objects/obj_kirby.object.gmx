@@ -50,7 +50,7 @@ SKID_DECELERATION = 1
 
 //Platforming timer constants
 DASH_TIMER = 6
-
+HOLD_THRESHOLD = 1 * global.game_speed
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -84,14 +84,17 @@ puffing = 0
 ducking = 0
 sliding = 0
 
+inhaling = 0
 bouncing = 0
 can_bounce = 0
 is_dead = false
 
-
 //health system
 hp=3
 
+
+//button variable
+primary_hold_time = 0
 
 depth = global.player_depth
 
@@ -153,7 +156,8 @@ DUCKING = 8
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//show_debug_message('off')
+            <string>///Nothing here, Alarm 2 is used for update falling animation
+//show_debug_message('off')
 </string>
           </argument>
         </arguments>
@@ -246,22 +250,23 @@ dashing = false
             <kind>1</kind>
             <string>///Get the player's input
 
-key_right = keyboard_check(vk_right)   //1 if pressing right, 0 otherwise
-key_left = -keyboard_check(vk_left)    //-1 if pressing left, 0 otherwise
-key_down = keyboard_check(vk_down)
-key_jump = keyboard_check(ord('X'))     //A
-key_primary = keyboard_check(ord('Z'))  //B
+key_left = keyboard_check(INPUT.LEFT)   //1 if pressing right, 0 otherwise
+key_right = keyboard_check(INPUT.RIGHT)    //-1 if pressing left, 0 otherwise
+key_down = keyboard_check(INPUT.DOWN)
+key_jump = keyboard_check(INPUT.JUMP)     //A
+key_primary = keyboard_check(INPUT.PRIMARY)  //B
 
 
-key_just_right = keyboard_check_pressed(vk_right)
-key_just_left = -keyboard_check_pressed(vk_left)
-key_just_down = keyboard_check_pressed(vk_down)
-key_just_jump = keyboard_check_pressed(ord('X'))
-key_just_primary = keyboard_check_pressed(ord('Z'))
+key_just_left = keyboard_check_pressed(INPUT.LEFT)
+key_just_right = keyboard_check_pressed(INPUT.RIGHT)
+key_just_down = keyboard_check_pressed(INPUT.DOWN)
+key_just_jump = keyboard_check_pressed(INPUT.JUMP)
+key_just_primary = keyboard_check_pressed(INPUT.PRIMARY)
 
+key_release_primary = keyboard_check_released(INPUT.PRIMARY)
 
-move = key_left+key_right;  //if pressing both right and left, movement cancels out
-move_pulse = key_just_left+key_just_right
+move = key_right-key_left;  //if pressing both right and left, movement cancels out
+move_pulse = key_just_right-key_just_left
 
 //if(keyboard_check_pressed(ord('Q'))) image_xscale = -image_xscale
 
@@ -293,6 +298,7 @@ move_pulse = key_just_left+key_just_right
 is_moving = (move != 0)
 is_moving_same_dir_again = (sign(last_dir) == sign(move_pulse))
 
+if(inhaling) is_moving = 0
 
 if (is_moving and not sliding){
     dir = move
@@ -583,9 +589,52 @@ if(key_just_primary){
         event_user(0)   //Puffing event
     }
     
-    if(ducking and not sliding){
-        event_user(1)   //Sliding event
+    else if(ducking and not sliding){
+        //Sliding event
+        sliding = 1
+        hsp = dir * SLIDING_SPD
     }
+    
+    else {
+        //Inhaling
+        inhaling = 1
+        
+        inhale_range_obj = instance_create(x,y,obj_inhale_range)
+    }
+    
+}
+if(key_primary){    
+    primary_hold_time += 1
+}
+
+//Release event
+if(key_release_primary){
+    if(primary_hold_time &gt; HOLD_THRESHOLD){
+        hold_primary = true
+    }
+    
+    primary_hold_time = 0
+    inhaling = 0
+    if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
+}
+
+//Single Press Action
+if(key_just_primary){
+    //B
+
+    //Dash + B
+    
+    //Dash + Jump + B
+    
+    //Up + B
+    
+    //Down + B
+}
+
+
+//Holding Action
+if(key_release_primary){
+    //Hold B
 }
 
 </string>
@@ -852,9 +901,9 @@ if(not can_bounce and not bouncing){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Sliding event
-sliding = 1
-hsp = dir * SLIDING_SPD
+            <string>///Moveset
+
+
 </string>
           </argument>
         </arguments>
@@ -916,6 +965,7 @@ instance_create(x,y,obj_puff)
             <string>///Switch case
 loop_animation = true
 switch(sprite_index){
+    case spr_kirby_inhale: loop_animation = false; break;
     case spr_kirby_puff: loop_animation = false; break;
     case spr_kirby_fall1: image_index = image_number - 2; break;
     case spr_kirby_fall2: loop_animation = false; break;
@@ -984,7 +1034,10 @@ if(not instance_exists(obj_camera)){
 image_xscale = dir
 last_sprite = sprite_index
 
-if (puffing){
+if (inhaling){
+    sprite_index = spr_kirby_inhale
+    image_speed = 0.5
+} else if (puffing){
     sprite_index = spr_kirby_puff
     image_speed = 0.2
 } else if (sliding){
@@ -1095,7 +1148,7 @@ if(floating){
 draw_self()
 
 //Debug stuffs
-draw_debug_text(hsp,vsp,on_ground,falling,x,y)
+draw_debug_text(hsp,vsp,on_ground,falling,x,y,inhaling)
 
 state = ''
 

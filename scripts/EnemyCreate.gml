@@ -10,7 +10,7 @@ hsp = dir * WALK_SPD
 grav = global.grav
 VSP_MAX = global.vsp_max
 hp = MAX_HP
-
+inhalable = true
 depth = global.enemy_depth
 
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -149,4 +149,3 @@ if(enemy != noone){
     
 }
 */
-
