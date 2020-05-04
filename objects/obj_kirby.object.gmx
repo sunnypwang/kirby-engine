@@ -50,7 +50,13 @@ SKID_DECELERATION = 1
 
 //Platforming timer constants
 DASH_TIMER = 6
-HOLD_THRESHOLD = 1 * global.game_speed
+BUTTON_HOLD_THRESHOLD = 30  //1 * global.game_speed
+SUPER_INHALE_THRESHOLD = 30 //1 * global.game_speed 
+EXHAUST_THRESHOLD = 60      //2 * global.game_speed
+EXHAUST_TIMER = 30          //for waiting until finish exhausting
+INHALING_ENEMY_TIMER = 15   //for waiting until finish inhaling enemy/block
+INHALE_DELAY = 6           //use for stopping delay after releasing button
+
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -72,6 +78,8 @@ vsp=0
 dir=1
 last_dir=0
 on_ground=true
+inhale_range_obj = noone    //inhale range object
+
 
 
 //Player state variables
@@ -84,9 +92,14 @@ puffing = 0
 ducking = 0
 sliding = 0
 
-inhaling = 0
+inhaling = 0            //just inhaling (0 is not inhaling, 1 is inhaling, 2 is super inhaling) 
+inhaling_enemy = false   //temporary state of when an enemy is being inhaled
+stuffed = false         //finished inhaling, being stuffed
+exhausting = 0
+//super_inhaling = 0      //more powerful inhale
 bouncing = 0
 can_bounce = 0
+
 is_dead = false
 
 //health system
@@ -94,7 +107,7 @@ hp=3
 
 
 //button variable
-primary_hold_time = 0
+action_hold_time = 0
 
 depth = global.player_depth
 
@@ -134,6 +147,62 @@ DUCKING = 8
           <argument>
             <kind>1</kind>
             <string>show_debug_message('DEAD')
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="4">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Finished exhausting
+exhausting = 0
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="3">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Finish inhaling
+if(inhaling){
+    inhaling = 0
+}
+if(inhaling_enemy){
+    stuffed = true
+    inhaling_enemy = false
+}
+
+if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
 </string>
           </argument>
         </arguments>
@@ -254,16 +323,16 @@ key_left = keyboard_check(INPUT.LEFT)   //1 if pressing right, 0 otherwise
 key_right = keyboard_check(INPUT.RIGHT)    //-1 if pressing left, 0 otherwise
 key_down = keyboard_check(INPUT.DOWN)
 key_jump = keyboard_check(INPUT.JUMP)     //A
-key_primary = keyboard_check(INPUT.PRIMARY)  //B
+key_action = keyboard_check(INPUT.ACTION)  //B
 
 
 key_just_left = keyboard_check_pressed(INPUT.LEFT)
 key_just_right = keyboard_check_pressed(INPUT.RIGHT)
 key_just_down = keyboard_check_pressed(INPUT.DOWN)
 key_just_jump = keyboard_check_pressed(INPUT.JUMP)
-key_just_primary = keyboard_check_pressed(INPUT.PRIMARY)
+key_just_action = keyboard_check_pressed(INPUT.ACTION)
 
-key_release_primary = keyboard_check_released(INPUT.PRIMARY)
+key_release_action = keyboard_check_released(INPUT.ACTION)
 
 move = key_right-key_left;  //if pressing both right and left, movement cancels out
 move_pulse = key_just_right-key_just_left
@@ -298,7 +367,7 @@ move_pulse = key_just_right-key_just_left
 is_moving = (move != 0)
 is_moving_same_dir_again = (sign(last_dir) == sign(move_pulse))
 
-if(inhaling) is_moving = 0
+if(inhaling or exhausting) is_moving = 0
 
 if (is_moving and not sliding){
     dir = move
@@ -387,7 +456,7 @@ if(floating) vsp = min(vsp + FLOAT_GRAV, VSP_MAX_FLOAT)
 else vsp = min(vsp + GRAV, VSP_MAX)
 
 //Floating
-if ((key_just_jump) and (jumping or falling or floating) and not bouncing){
+if ((key_just_jump) and not stuffed and (jumping or falling or floating) and not (bouncing or inhaling or exhausting)){
     floating = 1
     jumping = 0
     falling = 0
@@ -396,7 +465,7 @@ if ((key_just_jump) and (jumping or falling or floating) and not bouncing){
 }
 
 //Jumping
-if (on_ground and not floating and not sliding){
+if (on_ground and not (floating or sliding or bouncing) and not (inhaling or exhausting) ){
     if(key_just_jump){
         vsp = -JUMP_SPD
         jumping = 1
@@ -431,18 +500,20 @@ if(vsp &gt; GRAV) {
 
 
 ///Bouncing
-if (can_bounce){
+if (can_bounce and not (inhaling or exhausting)){
     vsp = -BOUNCE_SPD
     bouncing = 1
     can_bounce = 0
 }
-if(falling or (vsp &gt; 0 and on_ground and bouncing)){
+//if touch ground again after bouncing state, stop bouncing
+if(falling or (vsp &gt; 0 and on_ground and bouncing)){    
     bouncing = 0
 }
 
 
 //Ducking
-if (on_ground and not floating and not falling and not bouncing and not is_moving and not sliding and key_down){
+//if on ground and not doing anything else
+if (on_ground and key_down and not stuffed and not (floating or falling or bouncing or is_moving or sliding or inhaling or exhausting)){
     ducking = 1
 } else {
     ducking = 0
@@ -450,6 +521,7 @@ if (on_ground and not floating and not falling and not bouncing and not is_movin
 
 
 //Sliding
+//if sliding off edge or come to stop
 if(falling or hsp == 0){
     sliding = 0
 }
@@ -582,8 +654,8 @@ if(vsp &lt; 0 and not keyboard_check(vk_space)){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Action Button (puffing, sliding, attacking)
-if(key_just_primary){
+            <string>///Action Button (puffing, sliding, inhaling, attacking)
+if(key_just_action){
     //if floating, return to normal state
     if(floating and not puffing){
         event_user(0)   //Puffing event
@@ -595,7 +667,7 @@ if(key_just_primary){
         hsp = dir * SLIDING_SPD
     }
     
-    else {
+    else if (not stuffed){
         //Inhaling
         inhaling = 1
         
@@ -603,23 +675,33 @@ if(key_just_primary){
     }
     
 }
-if(key_primary){    
-    primary_hold_time += 1
+if(key_action){    
+    action_hold_time += 1
+    if(inhaling and action_hold_time &gt; SUPER_INHALE_THRESHOLD){
+        inhaling = 2
+    }
+    if(inhaling and action_hold_time &gt; EXHAUST_THRESHOLD){
+
+        exhausting = 1
+        alarm[4] = EXHAUST_TIMER
+        alarm[3] = 1
+        //if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
+    }
 }
 
 //Release event
-if(key_release_primary){
-    if(primary_hold_time &gt; HOLD_THRESHOLD){
-        hold_primary = true
+if(key_release_action){
+    if(action_hold_time &gt; BUTTON_HOLD_THRESHOLD){
+        hold_action = true
     }
     
-    primary_hold_time = 0
-    inhaling = 0
-    if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
+    action_hold_time = 0
+    if(inhaling) alarm[3] = INHALE_DELAY  //delay before actual stop
+    
 }
 
 //Single Press Action
-if(key_just_primary){
+if(key_just_action){
     //B
 
     //Dash + B
@@ -633,7 +715,7 @@ if(key_just_primary){
 
 
 //Holding Action
-if(key_release_primary){
+if(key_release_action){
     //Hold B
 }
 
@@ -862,7 +944,7 @@ instance_destroy()
 //can_bounce = bounce can happen next step or not
 //bouncing = in a middle of bounce animation or not
 
-if(vsp &gt;= VSP_MAX and alarm[2] &lt; 0){
+if(not stuffed and vsp &gt;= VSP_MAX and alarm[2] &lt; 0){
     can_bounce = 1
     //show_debug_message(can_bounce)
 } else {
@@ -901,9 +983,11 @@ if(not can_bounce and not bouncing){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Moveset
+            <string>///Inhale Enemy Event
+//This get called by obj_inhale_range
 
-
+inhaling_enemy = true
+alarm[3] = INHALING_ENEMY_TIMER
 </string>
           </argument>
         </arguments>
@@ -965,11 +1049,16 @@ instance_create(x,y,obj_puff)
             <string>///Switch case
 loop_animation = true
 switch(sprite_index){
-    case spr_kirby_inhale: loop_animation = false; break;
+    case spr_kirby_inhale: image_index = image_number - 2; break;
+    case spr_kirby_inhale2: image_index = image_number - 2; break;
+    case spr_kirby_exhaust: loop_animation = false; break;
+    case spr_kirby_stuffing_transition: loop_animation = false; break;
     case spr_kirby_puff: loop_animation = false; break;
-    case spr_kirby_fall1: image_index = image_number - 2; break;
+    case spr_kirby_fall: image_index = image_number - 2; break;
     case spr_kirby_fall2: loop_animation = false; break;
     case spr_kirby_bounce : loop_animation = false; break;
+    case spr_kirby_big_jump : loop_animation = false; break;
+    case spr_kirby_big_fall : image_index = image_number - 2; break;
     default:  //do nothing
 }
 
@@ -1034,50 +1123,80 @@ if(not instance_exists(obj_camera)){
 image_xscale = dir
 last_sprite = sprite_index
 
-if (inhaling){
-    sprite_index = spr_kirby_inhale
-    image_speed = 0.5
-} else if (puffing){
-    sprite_index = spr_kirby_puff
-    image_speed = 0.2
-} else if (sliding){
-    sprite_index = spr_kirby_slide
-    image_speed = 1
-} else if (floating){    
-    sprite_index = spr_kirby_float
-    image_speed = 0.2
-} else if(jumping){
-    sprite_index = spr_kirby_jump
-    image_speed = 1
-} else if (bouncing) {
-    sprite_index = spr_kirby_bounce
-    image_speed = 1
-} else if (falling) {
-    if(alarm[2] &gt; 0)
-        sprite_index = spr_kirby_fall1
-    else
-        sprite_index = spr_kirby_fall2
-
-    //if(loop_animation) 
-    image_speed = 1
-    
-} else if (skidding){
-    sprite_index = spr_kirby_skid
-    image_speed = 1
-} else if(ducking) {
-    sprite_index = spr_kirby_duck
-    image_speed = 0
-} else if(is_moving or hsp != 0){
-    if(dashing) sprite_index = spr_kirby_run          
-    else sprite_index = spr_kirby_walk
-    image_speed = 0.5
-} else {
-    if(last_sprite == spr_kirby_slide){
-        sprite_index = spr_kirby_slide2
+//if no something in mouth, use normal sprite
+if(not stuffed){
+    if (inhaling){
+        if(inhaling == 2) sprite_index = spr_kirby_inhale2
+        else if(inhaling_enemy) sprite_index = spr_kirby_stuffing_transition
+        else sprite_index = spr_kirby_inhale
+        image_speed = 1
+    } else if (exhausting){
+        sprite_index = spr_kirby_exhaust
+        image_speed = 0.2
+    } else if (puffing){
+        sprite_index = spr_kirby_puff
+        image_speed = 0.2
+    } else if (sliding){
+        sprite_index = spr_kirby_slide
+        image_speed = 1
+    } else if (floating){    
+        sprite_index = spr_kirby_float
+        image_speed = 0.2
+    } else if(jumping){
+        sprite_index = spr_kirby_jump
+        image_speed = 1
+    } else if (bouncing) {
+        sprite_index = spr_kirby_bounce
+        image_speed = 1
+    } else if (falling) {
+        if(alarm[2] &gt; 0)
+            sprite_index = spr_kirby_fall
+        else
+            sprite_index = spr_kirby_fall2
+        image_speed = 1        
+    } else if (skidding){
+        sprite_index = spr_kirby_skid
+        image_speed = 1
+    } else if(ducking) {
+        sprite_index = spr_kirby_duck
+        image_speed = 0
+    } else if(is_moving or hsp != 0){
+        if(dashing) sprite_index = spr_kirby_run          
+        else sprite_index = spr_kirby_walk
+        image_speed = 0.5
+    } else {
+        if(last_sprite == spr_kirby_slide){
+            sprite_index = spr_kirby_slide2
+        }
+        else if((last_sprite == spr_kirby_fall) or (last_sprite == spr_kirby_fall2)){
+            sprite_index = spr_kirby_duck
+        }
+        else sprite_index = spr_kirby_still   
+        image_speed = 0
     }
-    else sprite_index = spr_kirby_still   
-    image_speed = 0
+} else {
+    if(jumping){
+        sprite_index = spr_kirby_big_jump
+        image_speed = 1
+    } else if (falling) {
+        sprite_index = spr_kirby_big_fall
+        
+    
+        //if(loop_animation) 
+        image_speed = 1
+        
+    } else if (skidding){
+        sprite_index = spr_kirby_big_skid
+        image_speed = 1
+    } else if(is_moving or hsp != 0){        
+        sprite_index = spr_kirby_big_walk
+        image_speed = 1
+    } else {
+        sprite_index = spr_kirby_big_still   
+        image_speed = 0
+    }
 }
+
 
 //Reset index if sprite changed
 if(last_sprite != sprite_index)
@@ -1156,6 +1275,7 @@ if(dashing) state += ' D'
 if(jumping) state += ' J'
 if(floating) state += ' F'
 if(sliding) state += ' S'
+if(inhaling) state += ' I'
 if(skidding) state += ' s'
 if(bouncing) state += ' b'
 if(falling) state += ' f'

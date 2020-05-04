@@ -5,7 +5,7 @@ enum INPUT {LEFT = vk_left,
             UP = vk_up, 
             DOWN = vk_down,
             JUMP = ord('X'),
-            PRIMARY = ord('Z')
+            ACTION = ord('Z')
             }
 
 

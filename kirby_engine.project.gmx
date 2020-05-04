@@ -16,33 +16,52 @@
     </sprites>
     <sprites name="Kirby">
       <sprite>sprites\spr_kirby_mask</sprite>
-      <sprite>sprites\spr_kirby_still</sprite>
-      <sprite>sprites\spr_kirby_walk</sprite>
-      <sprite>sprites\spr_kirby_run</sprite>
-      <sprite>sprites\spr_kirby_jump</sprite>
-      <sprite>sprites\spr_kirby_fall1</sprite>
-      <sprite>sprites\spr_kirby_fall_full</sprite>
-      <sprite>sprites\spr_kirby_fall2</sprite>
-      <sprite>sprites\spr_kirby_bounce</sprite>
-      <sprite>sprites\spr_kirby_duck</sprite>
-      <sprite>sprites\spr_kirby_skid</sprite>
-      <sprite>sprites\spr_kirby_float</sprite>
-      <sprite>sprites\spr_kirby_float_still</sprite>
-      <sprite>sprites\spr_kirby_dead</sprite>
-      <sprite>sprites\spr_kirby_puff</sprite>
-      <sprite>sprites\spr_kirby_slide</sprite>
-      <sprite>sprites\spr_kirby_slide2</sprite>
-      <sprite>sprites\spr_puff</sprite>
-      <sprite>sprites\spr_effect1</sprite>
-      <sprite>sprites\spr_kirby_inhale</sprite>
-      <sprite>sprites\spr_kirby_exhaust</sprite>
-      <sprite>sprites\spr_effect_inhale</sprite>
+      <sprites name="Normal">
+        <sprite>sprites\spr_kirby_still</sprite>
+        <sprite>sprites\spr_kirby_walk</sprite>
+        <sprite>sprites\spr_kirby_run</sprite>
+        <sprite>sprites\spr_kirby_jump</sprite>
+        <sprite>sprites\spr_kirby_fall</sprite>
+        <sprite>sprites\spr_kirby_fall2</sprite>
+        <sprite>sprites\spr_kirby_fall_full</sprite>
+        <sprite>sprites\spr_kirby_bounce</sprite>
+        <sprite>sprites\spr_kirby_skid</sprite>
+        <sprite>sprites\spr_kirby_float</sprite>
+        <sprite>sprites\spr_kirby_duck</sprite>
+        <sprite>sprites\spr_kirby_float_still</sprite>
+        <sprite>sprites\spr_kirby_puff</sprite>
+        <sprite>sprites\spr_kirby_slide</sprite>
+        <sprite>sprites\spr_kirby_slide2</sprite>
+        <sprite>sprites\spr_kirby_inhale</sprite>
+        <sprite>sprites\spr_kirby_inhale3</sprite>
+        <sprite>sprites\spr_kirby_inhale2</sprite>
+        <sprite>sprites\spr_kirby_stuffing_transition</sprite>
+        <sprite>sprites\spr_kirby_exhaust</sprite>
+        <sprite>sprites\spr_kirby_dead</sprite>
+      </sprites>
+      <sprites name="Big">
+        <sprite>sprites\spr_kirby_big_still</sprite>
+        <sprite>sprites\spr_kirby_big_walk</sprite>
+        <sprite>sprites\spr_kirby_big_jump</sprite>
+        <sprite>sprites\spr_kirby_big_fall</sprite>
+        <sprite>sprites\spr_kirby_big_duck</sprite>
+        <sprite>sprites\sprite45</sprite>
+        <sprite>sprites\spr_kirby_big_skid</sprite>
+      </sprites>
+      <sprite>sprites\sprite18</sprite>
+      <sprite>sprites\sprite27</sprite>
+      <sprite>sprites\sprite38</sprite>
+      <sprite>sprites\spr_inhale_range</sprite>
+      <sprites name="Effects">
+        <sprite>sprites\spr_effect1</sprite>
+        <sprite>sprites\spr_effect_inhale</sprite>
+        <sprite>sprites\spr_puff</sprite>
+      </sprites>
     </sprites>
     <sprites name="Enemies">
       <sprite>sprites\spr_enemy32_mask</sprite>
       <sprite>sprites\spr_waddle_dee</sprite>
     </sprites>
-    <sprite>sprites\sprite18</sprite>
     <sprites name="Map">
       <sprite>sprites\spr_hub_door</sprite>
       <sprite>sprites\spr_hub_door_opened</sprite>
@@ -51,8 +70,6 @@
     <sprites name="Level">
       <sprite>sprites\spr_door</sprite>
     </sprites>
-    <sprite>sprites\sprite27</sprite>
-    <sprite>sprites\sprite36</sprite>
   </sprites>
   <backgrounds name="background">
     <backgrounds name="Tileset">
