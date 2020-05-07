@@ -56,7 +56,7 @@ EXHAUST_THRESHOLD = 60      //2 * global.game_speed
 EXHAUST_TIMER = 30          //for waiting until finish exhausting
 INHALING_ENEMY_TIMER = 15   //for waiting until finish inhaling enemy/block
 INHALE_DELAY = 6           //use for stopping delay after releasing button
-
+STUFFING_DELAY = 6
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -81,8 +81,10 @@ on_ground=true
 inhale_range_obj = noone    //inhale range object
 
 
+depth = global.player_depth
 
-//Player state variables
+//Player states
+
 jumping = 0
 skidding = 0
 dashing = 0
@@ -92,11 +94,15 @@ puffing = 0
 ducking = 0
 sliding = 0
 
+//Inhaling states
+//inhaling &gt; inhaling_enemy &gt; stuffing &gt; stuffed
 inhaling = 0            //just inhaling (0 is not inhaling, 1 is inhaling, 2 is super inhaling) 
 inhaling_enemy = false   //temporary state of when an enemy is being inhaled
-stuffed = false         //finished inhaling, being stuffed
+stuffing = false        //transition state from inhaling to stuffed
+stuffed = false         //BIG kirby
 exhausting = 0
-//super_inhaling = 0      //more powerful inhale
+
+//Bouncing states
 bouncing = 0
 can_bounce = 0
 
@@ -106,10 +112,9 @@ is_dead = false
 hp=3
 
 
-//button variable
+//Button variable
 action_hold_time = 0
 
-depth = global.player_depth
 
 /*
 //platforming state constants
@@ -193,15 +198,30 @@ exhausting = 0
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Finish inhaling
-if(inhaling){
+            <string>///Inhale timer - inhale nothing and inhale enemies
+
+//Alarm 3 is used in 2 scenarios
+//First, INHALE_DELAY - delay kirby stop inhaling animation (to make a better gameplay experience)
+//when it goes off, change kirby state to inhaling = false
+
+//Second, INHALING_ENEMY_TIMER - use with event 1 when inhaling something
+//when it goes off, first it change kirby state to stuffing for stuffing transition animation (which start another timer)
+//then it change kirby state to stuffed (big) finally
+if(inhaling_enemy){
+    if(not stuffing){
+        stuffing = true
+        alarm[3] = STUFFING_DELAY
+    } else {
+        stuffing = false
+        inhaling_enemy = false
+        stuffed = true
+        inhaling = 0
+    }
+} else if(inhaling){
     inhaling = 0
 }
-if(inhaling_enemy){
-    stuffed = true
-    inhaling_enemy = false
-}
 
+//destroy inhale obj in either scenario
 if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
 </string>
           </argument>
@@ -698,7 +718,7 @@ if(key_release_action){
     }
     
     action_hold_time = 0
-    if(inhaling) alarm[3] = INHALE_DELAY  //delay before actual stop
+    if(inhaling and not inhaling_enemy) alarm[3] = INHALE_DELAY  //delay before actual stop
     
 }
 
@@ -1128,8 +1148,8 @@ last_sprite = sprite_index
 //if no something in mouth, use normal sprite
 if(not stuffed){
     if (inhaling){
-        if(inhaling == 2) sprite_index = spr_kirby_inhale2
-        else if(inhaling_enemy) sprite_index = spr_kirby_stuffing_transition
+        if(stuffing) sprite_index = spr_kirby_stuffing_transition
+        else if(inhaling == 2) sprite_index = spr_kirby_inhale2
         else sprite_index = spr_kirby_inhale
         image_speed = 1
     } else if (exhausting){
@@ -1269,7 +1289,7 @@ if(floating){
 draw_self()
 
 //Debug stuffs
-draw_debug_text(hsp,vsp,on_ground,falling,x,y,inhaling)
+draw_debug_text(hsp,vsp,on_ground,falling,x,y,inhaling,sprite_get_name(sprite_index))
 
 state = ''
 

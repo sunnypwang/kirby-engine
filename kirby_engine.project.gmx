@@ -61,6 +61,7 @@
     <sprites name="Enemies">
       <sprite>sprites\spr_enemy32_mask</sprite>
       <sprite>sprites\spr_waddle_dee</sprite>
+      <sprite>sprites\spr_waddle_dee_hurt</sprite>
     </sprites>
     <sprites name="Map">
       <sprite>sprites\spr_hub_door</sprite>

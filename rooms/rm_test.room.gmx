@@ -51,7 +51,7 @@
     <view visible="0" objName="&lt;undefined&gt;" xview="0" yview="0" wview="640" hview="480" xport="0" yport="0" wport="640" hport="480" hborder="32" vborder="32" hspeed="-1" vspeed="-1"/>
   </views>
   <instances>
-    <instance objName="obj_kirby" x="2496" y="416" name="inst_F3CBB7CD" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_kirby" x="2112" y="128" name="inst_F3CBB7CD" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="32" y="0" name="inst_BF2627BE" locked="0" code="" scaleX="1" scaleY="12" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="32" y="384" name="inst_A70BFCD2" locked="0" code="" scaleX="20" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="288" y="288" name="inst_A272F2C6" locked="0" code="" scaleX="3" scaleY="3" colour="4294967295" rotation="0"/>
@@ -93,7 +93,7 @@
     <instance objName="obj_solid" x="2144" y="160" name="inst_48BBE5FE" locked="0" code="" scaleX="5" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="2336" y="224" name="inst_084AC9A0" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="2144" y="128" name="inst_0DC6E79B" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_solid" x="2272" y="128" name="inst_46B4AA43" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_solid" x="2208" y="128" name="inst_46B4AA43" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="2016" y="288" name="inst_A8EDB494" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="2432" y="0" name="inst_40B68908" locked="0" code="" scaleX="1" scaleY="6" colour="4294967295" rotation="0"/>
     <instance objName="obj_init_room" x="96" y="32" name="inst_73CD9D1E" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -139,7 +139,7 @@
     <instance objName="obj_door" x="1792" y="320" name="inst_CB0F658E" locked="0" code="linked_room = rm_test2&#xA;" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_waddle_dee" x="320" y="256" name="inst_A531E40C" locked="0" code="" scaleX="-1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_waddle_dee" x="96" y="256" name="inst_F47A25D6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_waddle_dee" x="2560" y="352" name="inst_9F508E60" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_waddle_dee" x="2176" y="96" name="inst_9F508E60" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2592" y="384" name="inst_733BF7AF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2816" y="224" name="inst_2DB817C4" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2944" y="160" name="inst_101B03BB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>

@@ -1,8 +1,11 @@
 #define EnemyCreate
-///EnemyCreate(spd,hp)
+///EnemyCreate(spd,hp,hurt_sprite_index)
 
 WALK_SPD = argument[0]
 MAX_HP = argument[1]
+
+if(argument_count > 2) hurt_sprite_index = argument[2]
+else hurt_sprite_index = sprite_index
 
 vsp = 0
 dir = image_xscale

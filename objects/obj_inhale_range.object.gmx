@@ -26,7 +26,24 @@
           <argument>
             <kind>1</kind>
             <string>dir = obj_kirby.dir
+x = obj_kirby.x
+y = obj_kirby.y
 image_xscale = dir
+inhaled_enemy = noone
+inhaled_enemy_hurt_sprite_index = -1
+inhaled_enemy_x = 0
+inhaled_enemy_y = 0
+
+//variable used for calculating enemy sprite trajectory when being inhaled
+bound = obj_kirby.INHALING_ENEMY_TIMER
+bound_val = 1&lt;&lt;(bound/2)
+counter = 0
+sx = 0
+sy = 0
+vx = 0
+vy = 0
+ax = 0
+ay = 0
 </string>
           </argument>
         </arguments>
@@ -74,8 +91,54 @@ y = obj_kirby.y
           <argument>
             <kind>1</kind>
             <string>if(other.inhalable) {
+    inhaled_enemy = other
+    inhaled_enemy_hurt_sprite_index = other.hurt_sprite_index
+    
+    px = other.x
+    py = other.y
+    sx = px
+    sy = py
+    dirx = sign(x - sx)
+    diry = sign(y - sy)
+    
     instance_destroy(other)
     with obj_kirby event_user(1)
+}
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="8" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>draw_self()
+if(inhaled_enemy != noone){
+    show_debug_message(1/(x - sx))
+    sx = px + (x - px)*(counter/bound)
+    sy = py + (y - py)*(counter/bound)
+    counter = min(counter+1,bound)
+    //ax = (x - inhaled_enemy_x)*0.1
+    //ay = (y - inhaled_enemy_y)*0.1
+    draw_sprite_ext(inhaled_enemy_hurt_sprite_index, 0, sx, sy, 1, 1, 0, c_white, 1)
+    //sx += vx
+    //sy += vy
+    //vx += ax
+    //vy += ay
 }
 </string>
           </argument>
