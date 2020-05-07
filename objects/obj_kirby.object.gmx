@@ -667,11 +667,14 @@ if(key_just_action){
         hsp = dir * SLIDING_SPD
     }
     
-    else if (not stuffed){
-        //Inhaling
-        inhaling = 1
-        
-        inhale_range_obj = instance_create(x,y,obj_inhale_range)
+    else {
+        if (not stuffed and not (sliding or puffing)){
+            //Inhaling
+            inhaling = 1
+            if(not instance_exists(inhale_range_obj)){
+                inhale_range_obj = instance_create(x,y,obj_inhale_range)
+            }
+        }
     }
     
 }
@@ -681,11 +684,10 @@ if(key_action){
         inhaling = 2
     }
     if(inhaling and action_hold_time &gt; EXHAUST_THRESHOLD){
-
         exhausting = 1
         alarm[4] = EXHAUST_TIMER
-        alarm[3] = 1
-        //if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
+        inhaling = 0
+        if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
     }
 }
 

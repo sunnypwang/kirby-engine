@@ -121,13 +121,13 @@
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_init</room>
-    <room>rooms\rm_test</room>
-    <rooms name="World">
-      <room>rooms\rm_world1</room>
-    </rooms>
     <rooms name="Testing">
+      <room>rooms\rm_test</room>
       <room>rooms\rm_test2</room>
       <room>rooms\rm_template</room>
+    </rooms>
+    <rooms name="World">
+      <room>rooms\rm_world1</room>
     </rooms>
   </rooms>
   <help>
