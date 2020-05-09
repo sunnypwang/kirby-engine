@@ -45,8 +45,9 @@
         <sprite>sprites\spr_kirby_big_jump</sprite>
         <sprite>sprites\spr_kirby_big_fall</sprite>
         <sprite>sprites\spr_kirby_big_duck</sprite>
-        <sprite>sprites\sprite45</sprite>
         <sprite>sprites\spr_kirby_big_skid</sprite>
+        <sprite>sprites\spr_kirby_spit</sprite>
+        <sprite>sprites\spr_kirby_spit2</sprite>
       </sprites>
       <sprite>sprites\sprite18</sprite>
       <sprite>sprites\sprite27</sprite>
@@ -56,6 +57,8 @@
         <sprite>sprites\spr_effect1</sprite>
         <sprite>sprites\spr_effect_inhale</sprite>
         <sprite>sprites\spr_puff</sprite>
+        <sprite>sprites\spr_effect_spit</sprite>
+        <sprite>sprites\spr_star_spit</sprite>
       </sprites>
     </sprites>
     <sprites name="Enemies">
@@ -106,8 +109,13 @@
     <objects name="Player">
       <object>objects\obj_kirby</object>
       <object>objects\obj_kirby_dead</object>
-      <object>objects\obj_puff</object>
       <object>objects\obj_inhale_range</object>
+      <objects name="Kirby Particle">
+        <object>objects\obj_damaging_particle_parent</object>
+        <object>objects\obj_star_spit</object>
+        <object>objects\obj_puff</object>
+        <object>objects\obj_particle_spit</object>
+      </objects>
     </objects>
     <objects name="Enemies">
       <object>objects\obj_enemyparent</object>

@@ -57,6 +57,7 @@ EXHAUST_TIMER = 30          //for waiting until finish exhausting
 INHALING_ENEMY_TIMER = 10   //for waiting until finish inhaling enemy/block
 INHALE_DELAY = 6           //use for stopping delay after releasing button
 STUFFING_DELAY = 6
+SPIT_TIMER = 10
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -101,6 +102,7 @@ inhaling_enemy = false   //temporary state of when an enemy is being inhaled
 stuffing = false        //transition state from inhaling to stuffed
 stuffed = false         //BIG kirby
 exhausting = 0
+spitting = false
 
 //Bouncing states
 bouncing = 0
@@ -152,6 +154,31 @@ DUCKING = 8
           <argument>
             <kind>1</kind>
             <string>show_debug_message('DEAD')
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="5">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Finish spitting star
+spitting = false
+stuffed = false
 </string>
           </argument>
         </arguments>
@@ -444,6 +471,7 @@ if(is_moving and not sliding){
         max_hsp = DASH_SPD
     } else {
         max_hsp = WALK_SPD
+        if(spitting) max_hsp = 1
     }
     
     //skidding
@@ -476,7 +504,7 @@ if(floating) vsp = min(vsp + FLOAT_GRAV, VSP_MAX_FLOAT)
 else vsp = min(vsp + GRAV, VSP_MAX)
 
 //Floating
-if ((key_just_jump) and not stuffed and (jumping or falling or floating) and not (bouncing or inhaling or exhausting)){
+if ((key_just_jump) and (jumping or falling or floating) and not stuffed and not (bouncing or inhaling or exhausting or spitting)){
     floating = 1
     jumping = 0
     falling = 0
@@ -485,7 +513,7 @@ if ((key_just_jump) and not stuffed and (jumping or falling or floating) and not
 }
 
 //Jumping
-if (on_ground and not (floating or sliding or bouncing) and not (inhaling or exhausting) ){
+if (on_ground and not (floating or sliding or bouncing) and not (inhaling or exhausting or spitting)){
     if(key_just_jump){
         vsp = -JUMP_SPD
         jumping = 1
@@ -546,114 +574,6 @@ if(falling or hsp == 0){
     sliding = 0
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//old stuff
-
-
-/*
-//Horizontal movement control
-skidding = 0;
-
-
-if(move == 1) {                 //pressing RIGHT
-    
-    if(hsp &lt; 0){                //if heading opposite, skid
-        hsp += SKID_DECEL;      
-        skidding = 1;
-        if(hsp &gt; 0) hsp = 0;
-    } else {                    //else, either walk or dash
-        if (place_meeting(x,y+1,obj_solid))     //if on the ground, check if player is triggering dash
-        {
-            if(alarm[1]&gt;0 and alarm[1] &lt; DASH_TIMER){
-                if(keyboard_check_pressed(vk_right)) 
-                    dashing=1
-                    
-            }
-        }
-        
-        if (dashing) hsp = DASH_SPD;
-        else hsp = WALK_SPD;
-    }
-    alarm[1] = DASH_TIMER;      //set dash alarm
-} else if (move == -1){         //pressing LEFT
-   
-    if(hsp &gt; 0){                //if heading opposite, skid
-        hsp -= SKID_DECEL;
-        skidding = 1;
-        if(hsp &lt; 0) hsp = 0;    
-    } else {                    //else, walk or dash
-        if (place_meeting(x,y+1,obj_solid))     //if on the ground, check if player is triggering dash
-        {
-            if(alarm[1]&gt;0 and alarm[1] &lt; DASH_TIMER){
-                if(keyboard_check_pressed(vk_left)) 
-                    dashing=1
-            }
-        }
-        if (dashing) hsp = -DASH_SPD;
-        else hsp = -WALK_SPD;
-        
-    }
-    alarm[1] = DASH_TIMER;
-} else {                        //not pressing anything
-    if(hsp &gt; 0) {               //decelerate Kirby         
-        hsp -= DECEL;
-        if(hsp &lt; 0) hsp = 0;
-    } else if (hsp &lt; 0) {
-        hsp += DECEL;
-        if(hsp &gt; 0) hsp = 0;
-    }
-       
-}
-
-//Vertical gravity
-if (!place_meeting(x,y+1,obj_solid))
-{
-    if(floating){
-        if(vsp &lt; VSPEEDMAX_FLOAT) vsp += float_grav;
-    } else if (vsp &lt; VSPEEDMAX) vsp += grav;
-}
-//Float Control
-if(((jumping or falling) and key_jump) or (floating and key_float)){
-    jumping = 0;
-    floating = 1;
-    vsp = -FLOAT_SPD;
-    dashing = 0;
-}
-
-//Jump Control
-if (place_meeting(x,y+1,obj_solid))
-{
-    if(!floating and key_jump) {
-        vsp = -JUMP_SPD;
-        jumping = 1;   
-    } else {
-        jumping = 0;
-        floating = 0;
-    }
-}
-if(vsp &lt; 0 and not keyboard_check(vk_space)){
-    vsp *= JUMP_DECEL;
-}
-
-
 </string>
           </argument>
         </arguments>
@@ -688,12 +608,17 @@ if(key_just_action){
     }
     
     else {
-        if (not stuffed and not (sliding or puffing)){
+        if (not stuffed and not (sliding or puffing or spitting)){
             //Inhaling
             inhaling = 1
             if(not instance_exists(inhale_range_obj)){
                 inhale_range_obj = instance_create(x,y,obj_inhale_range)
             }
+        }
+        else if (stuffed and not spitting){
+            spitting = true
+            instance_create(x,y,obj_star_spit)
+            alarm[5] = SPIT_TIMER
         }
     }
     
@@ -703,7 +628,7 @@ if(key_action){
     if(inhaling and action_hold_time &gt; SUPER_INHALE_THRESHOLD){
         inhaling = 2
     }
-    if(inhaling and action_hold_time &gt; EXHAUST_THRESHOLD){
+    if(inhaling and not inhaling_enemy and action_hold_time &gt; EXHAUST_THRESHOLD){
         exhausting = 1
         alarm[4] = EXHAUST_TIMER
         inhaling = 0
@@ -1081,6 +1006,9 @@ switch(sprite_index){
     case spr_kirby_bounce : loop_animation = false; break;
     case spr_kirby_big_jump : loop_animation = false; break;
     case spr_kirby_big_fall : image_index = image_number - 2; break;
+    case spr_kirby_spit : loop_animation = false; break;
+    case spr_kirby_spit2 : loop_animation = false; break;
+    
     default:  //do nothing
 }
 
@@ -1197,7 +1125,11 @@ if(not stuffed){
         image_speed = 0
     }
 } else {
-    if(jumping){
+    if(spitting){
+        sprite_index = spr_kirby_spit
+        if(alarm[5] &lt; sprite_get_number(spr_kirby_spit2)) sprite_index = spr_kirby_spit2
+        image_speed = 1
+    } else if(jumping){
         sprite_index = spr_kirby_big_jump
         image_speed = 1
     } else if (falling) {
