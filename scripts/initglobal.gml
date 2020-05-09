@@ -25,5 +25,6 @@ global.grav = 1
 global.vsp_max = 8
 
 #define InitRendering
+global.effect_depth = -3
 global.player_depth = -2
 global.enemy_depth = -1
