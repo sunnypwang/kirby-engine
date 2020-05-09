@@ -48,6 +48,7 @@
         <sprite>sprites\spr_kirby_big_skid</sprite>
         <sprite>sprites\spr_kirby_spit</sprite>
         <sprite>sprites\spr_kirby_spit2</sprite>
+        <sprite>sprites\spr_kirby_swallow</sprite>
       </sprites>
       <sprite>sprites\sprite18</sprite>
       <sprite>sprites\sprite27</sprite>
