@@ -5,7 +5,7 @@
   <visible>-1</visible>
   <depth>0</depth>
   <persistent>0</persistent>
-  <parentName>&lt;undefined&gt;</parentName>
+  <parentName>obj_damaging_particle_parent</parentName>
   <maskName>&lt;undefined&gt;</maskName>
   <events>
     <event eventtype="0" enumb="0">
@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>dir = obj_kirby.dir
 hspeed = dir * 8 + obj_kirby.hsp
-depth = obj_kirby.depth - 1
+depth = global.effect_depth //obj_kirby.depth - 1
 //sprite_subimg_number = sprite_get_number(sprite_index)
 //alarm[0] = 2 * sprite_subimg_number
 </string>
