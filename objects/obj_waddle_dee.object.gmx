@@ -51,7 +51,7 @@ EnemyCreate(2,3,spr_waddle_dee_hurt)
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>image_speed = 0.5
+            <string>image_speed = 0.2
 </string>
           </argument>
         </arguments>
