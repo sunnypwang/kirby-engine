@@ -54,7 +54,7 @@ BUTTON_HOLD_THRESHOLD = 30  //1 * global.game_speed
 SUPER_INHALE_THRESHOLD = 30 //1 * global.game_speed 
 EXHAUST_THRESHOLD = 60      //2 * global.game_speed
 EXHAUST_TIMER = 30          //for waiting until finish exhausting
-INHALING_ENEMY_TIMER = 15   //for waiting until finish inhaling enemy/block
+INHALING_ENEMY_TIMER = 10   //for waiting until finish inhaling enemy/block
 INHALE_DELAY = 6           //use for stopping delay after releasing button
 STUFFING_DELAY = 6
 

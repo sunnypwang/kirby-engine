@@ -33,10 +33,11 @@ inhaled_enemy = noone
 inhaled_enemy_hurt_sprite_index = -1
 inhaled_enemy_x = 0
 inhaled_enemy_y = 0
+depth = global.enemy_depth
 
 //variable used for calculating enemy sprite trajectory when being inhaled
 bound = obj_kirby.INHALING_ENEMY_TIMER
-bound_val = 1&lt;&lt;(bound/2)
+bound_val = sqr(bound)
 counter = 0
 sx = 0
 sy = 0
@@ -128,9 +129,9 @@ y = obj_kirby.y
             <kind>1</kind>
             <string>draw_self()
 if(inhaled_enemy != noone){
-    show_debug_message(1/(x - sx))
-    sx = px + (x - px)*(counter/bound)
-    sy = py + (y - py)*(counter/bound)
+
+    sx = px + (x - px)*(sqr(counter)/bound_val)
+    sy = py + (y - py)*(sqr(counter)/bound_val)
     counter = min(counter+1,bound)
     //ax = (x - inhaled_enemy_x)*0.1
     //ay = (y - inhaled_enemy_y)*0.1
