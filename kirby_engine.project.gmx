@@ -115,6 +115,7 @@
       <script>scripts\GetSprites.gml</script>
       <script>scripts\CreateArray.gml</script>
       <script>scripts\EndGame.gml</script>
+      <script>scripts\print.gml</script>
     </scripts>
     <scripts name="Debug">
       <script>scripts\draw_debug_text.gml</script>
