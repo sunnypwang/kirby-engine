@@ -52,13 +52,7 @@ SKID_DECELERATION = 1
 DASH_TIMER = 6
 BUTTON_HOLD_THRESHOLD = 30  //1 * global.game_speed
 SUPER_INHALE_THRESHOLD = 30 //1 * global.game_speed 
-EXHAUST_THRESHOLD = 60      //2 * global.game_speed
-EXHAUST_TIMER = 30          //for waiting until finish exhausting
-INHALING_ENEMY_TIMER = 10   //for waiting until finish inhaling enemy/block
-INHALE_DELAY = 6           //use for stopping delay after releasing button
-STUFFING_DELAY = 6
-SPIT_TIMER = 10
-SWALLOW_TIMER = sprite_get_number(spr_kirby_swallow)    //for waiting until finish swallowing
+
 
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
@@ -68,7 +62,13 @@ SMALL_GAP_OFFSET = 4 //use for snapping when jumping through small gaps
 //Animation constants
 PUFFING_TIMER = 10
 UPDATE_FALLING_TIMER = 20
-
+EXHAUST_THRESHOLD = 60      //2 * global.game_speed
+EXHAUST_TIMER = 30          //for waiting until finish exhausting
+INHALING_ENEMY_TIMER = 10   //for waiting until finish inhaling enemy/block
+INHALE_DELAY = 6           //use for stopping delay after releasing button
+STUFFING_DELAY = 6
+SPIT_TIMER = 10
+SWALLOW_TIMER = sprite_get_number(spr_kirby_swallow)    //for waiting until finish swallowing
 
 //Animation variables
 loop_animation = true
@@ -133,6 +133,29 @@ FALLING_FLOATING = 7
 DUCKING = 8
 //state = STILL
 */
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Sprite constants
+SPRITES = global.DS_SPRITES_KIRBY  //SPRITES is a ds_map that contains sprite name and its index
 </string>
           </argument>
         </arguments>
@@ -665,6 +688,7 @@ if(key_release_action){
     
 }
 
+
 //Single Press Action
 if(key_just_action){
     //B
@@ -1014,6 +1038,7 @@ instance_create(x,y,obj_puff)
             <string>///Switch case
 loop_animation = true
 switch(sprite_index){
+    case spr_kirby_float: image_index = image_number - 12; break;
     case spr_kirby_puff: loop_animation = false; break;
     case spr_kirby_fall: image_index = image_number - 2; break;
     case spr_kirby_fall2: loop_animation = false; break;
@@ -1021,7 +1046,7 @@ switch(sprite_index){
     case spr_kirby_inhale: image_index = image_number - 2; break;
     case spr_kirby_inhale2: image_index = image_number - 2; break;
     case spr_kirby_exhaust: loop_animation = false; break;
-    case spr_kirby_stuffing_transition: loop_animation = false; break;
+    case spr_kirby_stuffing: loop_animation = false; break;
     case spr_kirby_big_jump : loop_animation = false; break;
     case spr_kirby_big_fall : image_index = image_number - 2; break;
     case spr_kirby_spit : loop_animation = false; break;
@@ -1030,6 +1055,8 @@ switch(sprite_index){
     
     default:  //do nothing
 }
+
+
 
 //run this animation once
 if(not loop_animation){
@@ -1095,80 +1122,76 @@ last_sprite = sprite_index
 //if no something in mouth, use normal sprite
 if(not stuffed){
     if (inhaling){
-        if(stuffing) sprite_index = spr_kirby_stuffing_transition
-        else if(inhaling == 2) sprite_index = spr_kirby_inhale2
-        else sprite_index = spr_kirby_inhale
+        if(stuffing) sprite_index = SPRITES[? 'stuffing']
+        else if(inhaling == 2) sprite_index = SPRITES[? 'inhale2']
+        else sprite_index = SPRITES[? 'inhale']
         image_speed = 1
     } else if (exhausting){
-        sprite_index = spr_kirby_exhaust
+        sprite_index = SPRITES[? 'exhaust']
         image_speed = 0.2
     } else if (puffing){
-        sprite_index = spr_kirby_puff
+        sprite_index = SPRITES[? 'puff']
         image_speed = 0.2
     } else if (sliding){
-        sprite_index = spr_kirby_slide
+        sprite_index = SPRITES[? 'slide']
         image_speed = 1
     } else if (floating){    
-        sprite_index = spr_kirby_float
-        image_speed = 0.2
+        sprite_index = SPRITES[? 'float']
+        image_speed = 1
     } else if(jumping){
-        sprite_index = spr_kirby_jump
+        sprite_index = SPRITES[? 'jump']
         image_speed = 1
     } else if (bouncing) {
-        sprite_index = spr_kirby_bounce
+        sprite_index = SPRITES[? 'bounce']
         image_speed = 1
     } else if (falling) {
         if(alarm[2] &gt; 0)
-            sprite_index = spr_kirby_fall
+            sprite_index = SPRITES[? 'fall']
         else
-            sprite_index = spr_kirby_fall2
+            sprite_index = SPRITES[? 'fall2']
         image_speed = 1        
     } else if (skidding){
-        sprite_index = spr_kirby_skid
+        sprite_index = SPRITES[? 'skid']
         image_speed = 1
     } else if(ducking) {
-        sprite_index = spr_kirby_duck
+        sprite_index = SPRITES[? 'duck']
         image_speed = 0
     } else if(is_moving or hsp != 0){
-        if(dashing) sprite_index = spr_kirby_run          
-        else sprite_index = spr_kirby_walk
+        if(dashing) sprite_index = SPRITES[? 'run']          
+        else sprite_index = SPRITES[? 'walk']
         image_speed = 0.5
     } else {
-        if(last_sprite == spr_kirby_slide){
-            sprite_index = spr_kirby_slide2
+        if(last_sprite == SPRITES[? 'slide']  ){
+            sprite_index = SPRITES[? 'slide2']  
         }
-        else if((last_sprite == spr_kirby_fall) or (last_sprite == spr_kirby_fall2)){
-            sprite_index = spr_kirby_duck
+        else if((last_sprite == SPRITES[? 'fall']  ) or (last_sprite == SPRITES[? 'fall2']  )){
+            sprite_index = SPRITES[? 'duck']  
         }
-        else sprite_index = spr_kirby_still   
+        else sprite_index = SPRITES[? 'still']   
         image_speed = 0
     }
 } else {
     if(spitting){
-        sprite_index = spr_kirby_spit
-        if(alarm[5] &lt; sprite_get_number(spr_kirby_spit2)) sprite_index = spr_kirby_spit2
+        sprite_index = SPRITES[? 'spit']
+        if(alarm[5] &lt; sprite_get_number(SPRITES[? 'spit2'])) sprite_index = SPRITES[? 'spit2']
         image_speed = 1
     } else if (swallowing){
-        sprite_index = spr_kirby_swallow
+        sprite_index = SPRITES[? 'swallow']
         image_speed = 1
     } else if(jumping){
-        sprite_index = spr_kirby_big_jump
+        sprite_index = SPRITES[? 'big_jump']
         image_speed = 1
     } else if (falling) {
-        sprite_index = spr_kirby_big_fall
-        
-    
-        //if(loop_animation) 
+        sprite_index = SPRITES[? 'big_fall']
         image_speed = 1
-        
     } else if (skidding){
-        sprite_index = spr_kirby_big_skid
+        sprite_index = SPRITES[? 'big_skid']
         image_speed = 1
     } else if(is_moving or hsp != 0){        
-        sprite_index = spr_kirby_big_walk
+        sprite_index = SPRITES[? 'big_walk']
         image_speed = 1
     } else {
-        sprite_index = spr_kirby_big_still   
+        sprite_index = SPRITES[? 'big_still']   
         image_speed = 0
     }
 }
@@ -1177,47 +1200,6 @@ if(not stuffed){
 //Reset index if sprite changed
 if(last_sprite != sprite_index)
 image_index = 0
-
-/*
-
-if(floating){
-    if(falling)
-        sprite_index = spr_kirby_float_still;
-    else 
-        sprite_index = spr_kirby_float;
-    image_speed = 0.1;
-    if(hsp != 0) image_xscale = sign(hsp);
-
-} else if(jumping or falling){
-    sprite_index = spr_kirby_jump;
-    if(vsp &lt; 0) {
-    image_index = 0;
-    image_speed = 0;
-    } else image_speed = 0.1;
-    
-    if(hsp != 0) image_xscale = sign(hsp);
-} else {
-    if(skidding){
-            sprite_index = spr_kirby_skid;
-            image_speed = 0.25;
-            if(hsp != 0) image_xscale = sign(hsp);
-    } else {
-        if(hsp != 0){
-            if(dashing){
-                sprite_index = spr_kirby_run;             
-            } else {
-                sprite_index = spr_kirby_walk;
-            }
-            image_speed = 0.5;
-            image_xscale = sign(hsp);
-            
-        } else {
-            sprite_index = spr_kirby_still;
-            image_speed = 0;
-        }
-    }
-    
-}
 </string>
           </argument>
         </arguments>

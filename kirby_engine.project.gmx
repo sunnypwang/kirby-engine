@@ -34,10 +34,9 @@
         <sprite>sprites\spr_kirby_inhale</sprite>
         <sprite>sprites\spr_kirby_inhale3</sprite>
         <sprite>sprites\spr_kirby_inhale2</sprite>
-        <sprite>sprites\spr_kirby_stuffing_transition</sprite>
+        <sprite>sprites\spr_kirby_stuffing</sprite>
         <sprite>sprites\spr_kirby_exhaust</sprite>
         <sprite>sprites\spr_kirby_dead</sprite>
-        <sprite>sprites\spr_kirby_fall_full</sprite>
       </sprites>
       <sprites name="Big">
         <sprite>sprites\spr_kirby_big_still</sprite>
@@ -50,7 +49,7 @@
         <sprite>sprites\spr_kirby_spit2</sprite>
         <sprite>sprites\spr_kirby_swallow</sprite>
       </sprites>
-      <sprite>sprites\sprite18</sprite>
+      <sprite>sprites\spr_idle</sprite>
       <sprite>sprites\sprite27</sprite>
       <sprite>sprites\sprite38</sprite>
       <sprite>sprites\spr_inhale_range</sprite>
@@ -70,6 +69,7 @@
         <sprite>sprites\spr_beam_puff</sprite>
         <sprite>sprites\sprite64</sprite>
         <sprite>sprites\sprite68</sprite>
+        <sprite>sprites\spr_beam_attack</sprite>
       </sprites>
       <sprites name="Effects">
         <sprite>sprites\spr_effect1</sprite>
@@ -103,11 +103,22 @@
   </backgrounds>
   <paths name="paths"/>
   <scripts name="scripts">
-    <script>scripts\Initglobal.gml</script>
-    <script>scripts\InitControlButton.gml</script>
-    <script>scripts\EnemyCreate.gml</script>
-    <script>scripts\draw_debug_text.gml</script>
-    <script>scripts\is_move_right.gml</script>
+    <scripts name="Global">
+      <script>scripts\Initglobal.gml</script>
+      <script>scripts\InitControlButton.gml</script>
+    </scripts>
+    <scripts name="Platforming">
+      <script>scripts\EnemyCreate.gml</script>
+    </scripts>
+    <scripts name="Utils">
+      <script>scripts\CreateDS.gml</script>
+      <script>scripts\GetSprites.gml</script>
+      <script>scripts\CreateArray.gml</script>
+      <script>scripts\EndGame.gml</script>
+    </scripts>
+    <scripts name="Debug">
+      <script>scripts\draw_debug_text.gml</script>
+    </scripts>
   </scripts>
   <objects name="objects">
     <object>objects\obj_debug_HUD</object>
@@ -160,6 +171,9 @@
       <room>rooms\rm_world1</room>
     </rooms>
   </rooms>
+  <constants number="1">
+    <constant name="LOOP_END">image_number - 2</constant>
+  </constants>
   <help>
     <rtf>help.rtf</rtf>
   </help>
