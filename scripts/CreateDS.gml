@@ -2,8 +2,8 @@
 //This script is used to create any new data structure
 //which will be tracked by global.MASTER_DS for deallocating purpose
 
-type = argument[0]
-ds_index = -1
+var type = argument[0]
+var ds_index = -1
 
 switch (type)
 {

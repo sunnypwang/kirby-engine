@@ -1,9 +1,9 @@
 ///CreateArray(*args)
 
-arr = array_create(argument_count)
-for (i=0; i<argument_count; i+=1)
+var _arr = array_create(argument_count)
+for (var _i=0; _i<argument_count; _i+=1)
 {
-    arr[i] = argument[i]
+    _arr[_i] = argument[_i]
 }
 
-return arr
+return _arr

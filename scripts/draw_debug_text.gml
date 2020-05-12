@@ -1,7 +1,7 @@
-text = ""
-for (i=0; i<argument_count; i+=1)
+var _text = ""
+for (var _i=0; _i<argument_count; _i+=1)
 {
-    text += string(argument[i]) + "#"
+    _text += string(argument[_i]) + "#"
 };
 
-draw_text_transformed(view_xview[0],view_yview[0],text,2,2,0);
+draw_text_transformed(view_xview[0],view_yview[0],_text,2,2,0);
