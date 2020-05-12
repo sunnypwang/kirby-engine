@@ -29,22 +29,38 @@
 x = obj_kirby.x
 y = obj_kirby.y
 image_xscale = dir
-inhaled_enemy = noone
-inhaled_enemy_hurt_sprite_index = -1
-inhaled_enemy_x = 0
-inhaled_enemy_y = 0
+inhaled_enemies = ds_list_create()
+
 depth = global.enemy_depth
+
 
 //variable used for calculating enemy sprite trajectory when being inhaled
 bound = obj_kirby.INHALING_ENEMY_TIMER
 bound_val = sqr(bound)
-counter = 0
-sx = 0
-sy = 0
-vx = 0
-vy = 0
-ax = 0
-ay = 0
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="1" enumb="0">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>ds_list_destroy(inhaled_enemies)
 </string>
           </argument>
         </arguments>
@@ -92,15 +108,13 @@ y = obj_kirby.y
           <argument>
             <kind>1</kind>
             <string>if(other.inhalable) {
-    inhaled_enemy = other
-    inhaled_enemy_hurt_sprite_index = other.hurt_sprite_index
-    
+    enemy_obj_idx = other.object_index
+    hurt_sprite = other.hurt_sprite_index
     px = other.x
     py = other.y
-    sx = px
-    sy = py
-    dirx = sign(x - sx)
-    diry = sign(y - sy)
+    counter = 0
+    print(other,object_get_name(enemy_obj_idx))
+    ds_list_add(inhaled_enemies, CreateArray(enemy_obj_idx, hurt_sprite, px, py, counter))
     
     instance_destroy(other)
     with obj_kirby event_user(1)
@@ -128,19 +142,27 @@ y = obj_kirby.y
           <argument>
             <kind>1</kind>
             <string>draw_self()
-if(inhaled_enemy != noone){
 
+enemy_count = ds_list_size(inhaled_enemies)
+//show_debug_message(enemy_count)
+for (var i=0; i&lt;enemy_count; i+=1)
+{
+    //list of enemy [inhaled_enemy,hurt_sprite,px,py,step_count]
+    enemy = inhaled_enemies[| i]
+    hurt_sprite = enemy[1]
+    px = enemy[2]
+    py = enemy[3]
+    counter = enemy[4]
     sx = px + (x - px)*(sqr(counter)/bound_val)
     sy = py + (y - py)*(sqr(counter)/bound_val)
-    counter = min(counter+1,bound)
-    //ax = (x - inhaled_enemy_x)*0.1
-    //ay = (y - inhaled_enemy_y)*0.1
-    draw_sprite_ext(inhaled_enemy_hurt_sprite_index, 0, sx, sy, 1, 1, 0, c_white, 1)
-    //sx += vx
-    //sy += vy
-    //vx += ax
-    //vy += ay
+    draw_sprite_ext(hurt_sprite, 0, sx, sy, 1, 1, 0, c_white, 1)
+    
+    //update array in DS list
+    enemy[@4] = min(counter+1,bound)
+    //show_debug_message(inhaled_enemies[| i])
+
 }
+
 </string>
           </argument>
         </arguments>
