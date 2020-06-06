@@ -50,7 +50,6 @@
         <sprite>sprites\spr_kirby_swallow</sprite>
       </sprites>
       <sprite>sprites\spr_idle</sprite>
-      <sprite>sprites\sprite27</sprite>
       <sprite>sprites\sprite38</sprite>
       <sprite>sprites\spr_inhale_range</sprite>
       <sprites name="Beam">
@@ -140,6 +139,7 @@
       </objects>
     </objects>
     <objects name="Player">
+      <object>objects\obj_kirby_beam</object>
       <object>objects\obj_kirby</object>
       <object>objects\obj_kirby_dead</object>
       <object>objects\obj_inhale_range</object>
@@ -153,6 +153,7 @@
     <objects name="Enemies">
       <object>objects\obj_enemyparent</object>
       <object>objects\obj_waddle_dee</object>
+      <object>objects\obj_waddle_doo</object>
     </objects>
     <objects name="Map">
       <object>objects\obj_hub_door</object>
@@ -172,8 +173,10 @@
       <room>rooms\rm_world1</room>
     </rooms>
   </rooms>
-  <constants number="1">
-    <constant name="LOOP_END">image_number - 2</constant>
+  <constants number="3">
+    <constant name="ABILITY_NONE">0</constant>
+    <constant name="ABILITY_MIX">1</constant>
+    <constant name="ABILITY_BEAM">2</constant>
   </constants>
   <help>
     <rtf>help.rtf</rtf>
