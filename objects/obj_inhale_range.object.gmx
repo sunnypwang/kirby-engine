@@ -31,6 +31,8 @@ y = obj_kirby.y
 image_xscale = dir
 inhaled_enemies = ds_list_create()
 
+ability = ABILITY_NONE
+
 depth = global.enemy_depth
 
 
@@ -108,16 +110,31 @@ y = obj_kirby.y
           <argument>
             <kind>1</kind>
             <string>if(other.inhalable) {
-    enemy_obj_idx = other.object_index
-    hurt_sprite = other.hurt_sprite_index
-    px = other.x
-    py = other.y
+    enemy = other
+    enemy_obj_idx = enemy.object_index
+    hurt_sprite = enemy.hurt_sprite_index
+    px = enemy.x
+    py = enemy.y
     counter = 0
-    print(other,object_get_name(enemy_obj_idx))
+    print(enemy,object_get_name(enemy_obj_idx))
     ds_list_add(inhaled_enemies, CreateArray(enemy_obj_idx, hurt_sprite, px, py, counter))
     
-    instance_destroy(other)
+    
     with obj_kirby event_user(1)
+
+    if (enemy.ability != ABILITY_NONE){
+        //ability is a variable that is used to pass to obj_kirby
+        //it will store the ability the enemy has
+        //it becomes mix if it is already assigned i.e. there are more than one ability in single inhale attempt
+        if(ability == ABILITY_NONE) ability = enemy.ability    
+        else ability = ABILITY_MIX
+        print(ability)
+        with obj_kirby {
+            transformable = true
+            ability = other.ability     // other is this object (obj_inhale_range)
+        }  
+    }
+    instance_destroy(other)
 }
 </string>
           </argument>

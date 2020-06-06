@@ -57,7 +57,7 @@ SUPER_INHALE_THRESHOLD = 30 //1 * global.game_speed
 //Collision constants
 FEET_OFFSET = bbox_bottom - bbox_top + 1
 SMALL_GAP_OFFSET = 4 //use for snapping when jumping through small gaps
-
+mask_index = spr_kirby_mask
 
 //Animation constants
 PUFFING_TIMER = 10
@@ -80,8 +80,10 @@ vsp=0
 dir=1
 last_dir=0
 on_ground=true
+is_moving=0
 inhale_range_obj = noone    //inhale range object
-
+transformable = false
+ability = -1
 
 depth = global.player_depth
 
@@ -607,6 +609,7 @@ if (on_ground and key_down and not stuffed and not (floating or falling or bounc
 if(on_ground and key_just_down and stuffed and not (spitting)){
     swallowing = true
     alarm[5] = SWALLOW_TIMER
+    if(transformable) event_user(3)
 }
 
 //Sliding
@@ -635,79 +638,8 @@ if(falling or hsp == 0){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Action Button (puffing, sliding, inhaling, attacking)
-if(key_just_action){
-    //if floating, return to normal state
-    if(floating and not puffing){
-        event_user(0)   //Puffing event
-    }
-    
-    else if(ducking and not sliding){
-        //Sliding event
-        sliding = 1
-        hsp = dir * SLIDING_SPD
-    }
-    
-    else {
-        if (not stuffed and not (sliding or puffing or spitting)){
-            //Inhaling
-            inhaling = 1
-            if(not instance_exists(inhale_range_obj)){
-                inhale_range_obj = instance_create(x,y,obj_inhale_range)
-            }
-        }
-        else if (stuffed and not spitting and not swallowing){
-            spitting = true
-            instance_create(x,y,obj_star_spit)
-            alarm[5] = SPIT_TIMER
-        }
-    }
-    
-}
-if(key_action){    
-    action_hold_time += 1
-    if(inhaling and action_hold_time &gt; SUPER_INHALE_THRESHOLD){
-        inhaling = 2
-    }
-    if(inhaling and not inhaling_enemy and action_hold_time &gt; EXHAUST_THRESHOLD){
-        exhausting = 1
-        alarm[4] = EXHAUST_TIMER
-        inhaling = 0
-        if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
-    }
-}
-
-//Release event
-if(key_release_action){
-    if(action_hold_time &gt; BUTTON_HOLD_THRESHOLD){
-        hold_action = true
-    }
-    
-    action_hold_time = 0
-    if(inhaling and not inhaling_enemy) alarm[3] = INHALE_DELAY  //delay before actual stop
-    
-}
-
-
-//Single Press Action
-if(key_just_action){
-    //B
-
-    //Dash + B
-    
-    //Dash + Jump + B
-    
-    //Up + B
-    
-    //Down + B
-}
-
-
-//Holding Action
-if(key_release_action){
-    //Hold B
-}
-
+            <string>///Action buttom
+event_user(2)
 </string>
           </argument>
         </arguments>
@@ -955,6 +887,140 @@ if(not can_bounce and not bouncing){
         </arguments>
       </action>
     </event>
+    <event eventtype="7" enumb="13">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Transformation
+
+show_debug_message('TRANFORMED')
+show_debug_message(ability)
+
+ability_obj = noone
+switch (ability){
+    case ABILITY_BEAM: ability_obj = obj_kirby_beam; break;
+
+    default: ability_obj = noone;
+}
+
+if (ability_obj){
+    instance_create(x,y,ability_obj)
+    instance_destroy()
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="7" enumb="12">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>///Action Button (puffing, sliding, inhaling, attacking)
+if(key_just_action){
+    //if floating, return to normal state
+    if(floating and not puffing){
+        event_user(0)   //Puffing event
+    }
+    
+    else if(ducking and not sliding){
+        //Sliding event
+        sliding = 1
+        hsp = dir * SLIDING_SPD
+    }
+    
+    else {
+        if (not stuffed and not (sliding or puffing or spitting)){
+            //Inhaling
+            inhaling = 1
+            if(not instance_exists(inhale_range_obj)){
+                inhale_range_obj = instance_create(x,y,obj_inhale_range)
+            }
+        }
+        else if (stuffed and not spitting and not swallowing){
+            spitting = true
+            instance_create(x,y,obj_star_spit)
+            alarm[5] = SPIT_TIMER
+        }
+    }
+    
+}
+if(key_action){    
+    action_hold_time += 1
+    if(inhaling and action_hold_time &gt; SUPER_INHALE_THRESHOLD){
+        inhaling = 2
+    }
+    if(inhaling and not inhaling_enemy and action_hold_time &gt; EXHAUST_THRESHOLD){
+        exhausting = 1
+        alarm[4] = EXHAUST_TIMER
+        inhaling = 0
+        if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
+    }
+}
+
+//Release event
+if(key_release_action){
+    if(action_hold_time &gt; BUTTON_HOLD_THRESHOLD){
+        hold_action = true
+    }
+    
+    action_hold_time = 0
+    if(inhaling and not inhaling_enemy) alarm[3] = INHALE_DELAY  //delay before actual stop
+    
+}
+
+
+//Single Press Action
+if(key_just_action){
+    //B
+
+    //Dash + B
+    
+    //Dash + Jump + B
+    
+    //Up + B
+    
+    //Down + B
+}
+
+
+//Holding Action
+if(key_release_action){
+    //Hold B
+}
+
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
     <event eventtype="7" enumb="11">
       <action>
         <libid>1</libid>
@@ -1147,9 +1213,11 @@ if(not stuffed){
     } else if (falling) {
         if(alarm[2] &gt; 0)
             sprite_index = SPRITES[? 'fall']
-        else
+            
+        else 
             sprite_index = SPRITES[? 'fall2']
-        image_speed = 1        
+        
+        image_speed = 1
     } else if (skidding){
         sprite_index = SPRITES[? 'skid']
         image_speed = 1
