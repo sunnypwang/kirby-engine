@@ -56,7 +56,7 @@
     <instance objName="obj_solid" x="32" y="384" name="inst_A70BFCD2" locked="0" code="" scaleX="20" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="288" y="288" name="inst_A272F2C6" locked="0" code="" scaleX="3" scaleY="3" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="416" y="224" name="inst_4B0CF03E" locked="0" code="" scaleX="3" scaleY="5" colour="4294967295" rotation="0"/>
-    <instance objName="obj_solid" x="544" y="224" name="inst_DA2E2C78" locked="0" code="" scaleX="3.09677410125732" scaleY="4" colour="4294967295" rotation="0"/>
+    <instance objName="obj_solid" x="544" y="224" name="inst_DA2E2C78" locked="0" code="" scaleX="3" scaleY="4" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="672" y="224" name="inst_F3CF0E68" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="736" y="224" name="inst_5DE21ECF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_solid" x="800" y="224" name="inst_ADF0C41F" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -139,7 +139,6 @@
     <instance objName="obj_door" x="1792" y="320" name="inst_CB0F658E" locked="0" code="linked_room = rm_test2&#xA;" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_waddle_dee" x="320" y="256" name="inst_A531E40C" locked="0" code="" scaleX="-1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_waddle_dee" x="96" y="256" name="inst_F47A25D6" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
-    <instance objName="obj_waddle_dee" x="2176" y="96" name="inst_9F508E60" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2592" y="384" name="inst_733BF7AF" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2816" y="224" name="inst_2DB817C4" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2944" y="160" name="inst_101B03BB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
@@ -187,6 +186,7 @@
     <instance objName="obj_slope_1r" x="2752" y="416" name="inst_BAFC5688" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2656" y="448" name="inst_168EEBBB" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
     <instance objName="obj_slope_end" x="2784" y="448" name="inst_3B45F629" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
+    <instance objName="obj_waddle_doo" x="2176" y="96" name="inst_4D8E2B56" locked="0" code="" scaleX="1" scaleY="1" colour="4294967295" rotation="0"/>
   </instances>
   <tiles/>
   <PhysicsWorld>0</PhysicsWorld>
