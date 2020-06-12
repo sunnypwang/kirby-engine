@@ -7,9 +7,9 @@
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
-  <bbox_left>18</bbox_left>
-  <bbox_right>59</bbox_right>
-  <bbox_top>26</bbox_top>
+  <bbox_left>14</bbox_left>
+  <bbox_right>65</bbox_right>
+  <bbox_top>18</bbox_top>
   <bbox_bottom>63</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
@@ -30,5 +30,10 @@
     <frame index="7">images\spr_kirby_walk_7.png</frame>
     <frame index="8">images\spr_kirby_walk_8.png</frame>
     <frame index="9">images\spr_kirby_walk_9.png</frame>
+    <frame index="10">images\spr_kirby_walk_10.png</frame>
+    <frame index="11">images\spr_kirby_walk_11.png</frame>
+    <frame index="12">images\spr_kirby_walk_12.png</frame>
+    <frame index="13">images\spr_kirby_walk_13.png</frame>
+    <frame index="14">images\spr_kirby_walk_14.png</frame>
   </frames>
 </sprite>
