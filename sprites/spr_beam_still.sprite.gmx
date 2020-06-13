@@ -2,15 +2,15 @@
 <sprite>
   <type>0</type>
   <xorig>40</xorig>
-  <yorigin>46</yorigin>
+  <yorigin>60</yorigin>
   <colkind>1</colkind>
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
   <bbox_left>10</bbox_left>
   <bbox_right>69</bbox_right>
-  <bbox_top>24</bbox_top>
-  <bbox_bottom>81</bbox_bottom>
+  <bbox_top>34</bbox_top>
+  <bbox_bottom>91</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
   <TextureGroups>
@@ -21,5 +21,7 @@
   <height>92</height>
   <frames>
     <frame index="0">images\spr_beam_still_0.png</frame>
+    <frame index="1">images\spr_beam_still_1.png</frame>
+    <frame index="2">images\spr_beam_still_2.png</frame>
   </frames>
 </sprite>

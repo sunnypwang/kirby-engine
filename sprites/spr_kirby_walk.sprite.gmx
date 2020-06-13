@@ -35,5 +35,10 @@
     <frame index="12">images\spr_kirby_walk_12.png</frame>
     <frame index="13">images\spr_kirby_walk_13.png</frame>
     <frame index="14">images\spr_kirby_walk_14.png</frame>
+    <frame index="15">images\spr_kirby_walk_15.png</frame>
+    <frame index="16">images\spr_kirby_walk_16.png</frame>
+    <frame index="17">images\spr_kirby_walk_17.png</frame>
+    <frame index="18">images\spr_kirby_walk_18.png</frame>
+    <frame index="19">images\spr_kirby_walk_19.png</frame>
   </frames>
 </sprite>

@@ -6,7 +6,7 @@
   <colkind>1</colkind>
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
-  <bboxmode>0</bboxmode>
+  <bboxmode>2</bboxmode>
   <bbox_left>16</bbox_left>
   <bbox_right>63</bbox_right>
   <bbox_top>20</bbox_top>

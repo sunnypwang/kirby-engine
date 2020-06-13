@@ -7,9 +7,9 @@
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
-  <bbox_left>8</bbox_left>
-  <bbox_right>63</bbox_right>
-  <bbox_top>14</bbox_top>
+  <bbox_left>0</bbox_left>
+  <bbox_right>70</bbox_right>
+  <bbox_top>2</bbox_top>
   <bbox_bottom>63</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
@@ -32,5 +32,13 @@
     <frame index="9">images\spr_beam_walk_9.png</frame>
     <frame index="10">images\spr_beam_walk_10.png</frame>
     <frame index="11">images\spr_beam_walk_11.png</frame>
+    <frame index="12">images\spr_beam_walk_12.png</frame>
+    <frame index="13">images\spr_beam_walk_13.png</frame>
+    <frame index="14">images\spr_beam_walk_14.png</frame>
+    <frame index="15">images\spr_beam_walk_15.png</frame>
+    <frame index="16">images\spr_beam_walk_16.png</frame>
+    <frame index="17">images\spr_beam_walk_17.png</frame>
+    <frame index="18">images\spr_beam_walk_18.png</frame>
+    <frame index="19">images\spr_beam_walk_19.png</frame>
   </frames>
 </sprite>
