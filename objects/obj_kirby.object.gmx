@@ -28,20 +28,20 @@
             <string>///Initialize platforming variables
 
 //Platforming constants
-WALK_SPD = 4
-DASH_SPD = 6
-SLIDING_SPD = 10
+WALK_SPD = 6
+DASH_SPD = 8
+SLIDING_SPD = 12
 FLOAT_SPD = 6
-BOUNCE_SPD = 8  //can go up 1 block
+BOUNCE_SPD = 12  //can go up 1 block
 
-GRAV = 1
+GRAV = 2
 VSP_MAX = 8
 
 FLOAT_GRAV = 0.5
 VSP_MAX_FLOAT = 2
 
-JUMP_SPD = 14
-JUMP_DECEL = 2
+JUMP_SPD = 20
+JUMP_DECEL = 4
 
 ACCELERATION = 1
 DECELERATION = 0.5
@@ -1200,7 +1200,7 @@ if(not stuffed){
         image_speed = 0.2
     } else if (puffing){
         sprite_index = SPRITES[? 'puff']
-        image_speed = 0.2
+        image_speed = 1
     } else if (sliding){
         sprite_index = SPRITES[? 'slide']
         image_speed = 1
@@ -1230,7 +1230,7 @@ if(not stuffed){
     } else if(is_moving or hsp != 0){
         if(dashing) sprite_index = SPRITES[? 'run']          
         else sprite_index = SPRITES[? 'walk']
-        image_speed = 0.5
+        image_speed = 1
     } else {
         if(last_sprite == SPRITES[? 'slide']  ){
             sprite_index = SPRITES[? 'slide2']  
@@ -1244,7 +1244,7 @@ if(not stuffed){
 } else {
     if(spitting){
         sprite_index = SPRITES[? 'spit']
-        if(alarm[5] &lt; sprite_get_number(SPRITES[? 'spit2'])) sprite_index = SPRITES[? 'spit2']
+        //if(alarm[5] &lt; sprite_get_number(SPRITES[? 'spit2'])) sprite_index = SPRITES[? 'spit2']
         image_speed = 1
     } else if (swallowing){
         sprite_index = SPRITES[? 'swallow']
@@ -1262,7 +1262,10 @@ if(not stuffed){
         sprite_index = SPRITES[? 'big_walk']
         image_speed = 1
     } else {
-        sprite_index = SPRITES[? 'big_still']   
+        if(last_sprite == SPRITES[? 'big_fall']){
+            sprite_index = SPRITES[? 'duck']  
+        }
+        else sprite_index = SPRITES[? 'big_still']   
         image_speed = 0
     }
 }
