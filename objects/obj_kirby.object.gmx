@@ -84,6 +84,7 @@ is_moving=0
 inhale_range_obj = noone    //inhale range object
 transformable = false
 ability = -1
+invincible = false
 
 depth = global.player_depth
 
@@ -810,6 +811,31 @@ if (is_moving){
     last_dir = dir
 }
 
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="4" ename="obj_enemyparent">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>if(not invincible){
+    alarm
+}
 </string>
           </argument>
         </arguments>
