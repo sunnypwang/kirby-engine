@@ -1,13 +1,13 @@
 #define EnemyCreate
-///EnemyCreate(spd,hp,hurt_sprite_index,ability)
+///EnemyCreate(spd,hp,ability)
 
 WALK_SPD = argument[0]
 MAX_HP = argument[1]
 
-if(argument_count > 2) hurt_sprite_index = argument[2]
-else hurt_sprite_index = sprite_index
+hurt_sprite_index = asset_get_index(sprite_get_name(sprite_index) + '_hurt')
+if(hurt_sprite_index == -1) hurt_sprite_index = sprite_index
 
-if(argument_count > 3) ability = argument[3]
+if(argument_count > 2) ability = argument[2]
 else ability = ABILITY_NONE
 
 vsp = 0
