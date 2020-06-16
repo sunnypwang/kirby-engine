@@ -7,9 +7,9 @@
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
-  <bbox_left>16</bbox_left>
-  <bbox_right>63</bbox_right>
-  <bbox_top>20</bbox_top>
+  <bbox_left>9</bbox_left>
+  <bbox_right>70</bbox_right>
+  <bbox_top>10</bbox_top>
   <bbox_bottom>63</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
@@ -23,5 +23,10 @@
     <frame index="0">images\spr_kirby_spit_0.png</frame>
     <frame index="1">images\spr_kirby_spit_1.png</frame>
     <frame index="2">images\spr_kirby_spit_2.png</frame>
+    <frame index="3">images\spr_kirby_spit_3.png</frame>
+    <frame index="4">images\spr_kirby_spit_4.png</frame>
+    <frame index="5">images\spr_kirby_spit_5.png</frame>
+    <frame index="6">images\spr_kirby_spit_6.png</frame>
+    <frame index="7">images\spr_kirby_spit_7.png</frame>
   </frames>
 </sprite>

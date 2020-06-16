@@ -2,15 +2,15 @@
 <sprite>
   <type>0</type>
   <xorig>40</xorig>
-  <yorigin>32</yorigin>
+  <yorigin>36</yorigin>
   <colkind>1</colkind>
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
-  <bbox_left>18</bbox_left>
-  <bbox_right>63</bbox_right>
-  <bbox_top>2</bbox_top>
-  <bbox_bottom>63</bbox_bottom>
+  <bbox_left>12</bbox_left>
+  <bbox_right>67</bbox_right>
+  <bbox_top>4</bbox_top>
+  <bbox_bottom>79</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
   <TextureGroups>
@@ -18,7 +18,7 @@
   </TextureGroups>
   <For3D>0</For3D>
   <width>80</width>
-  <height>64</height>
+  <height>80</height>
   <frames>
     <frame index="0">images\spr_kirby_big_jump_0.png</frame>
     <frame index="1">images\spr_kirby_big_jump_1.png</frame>

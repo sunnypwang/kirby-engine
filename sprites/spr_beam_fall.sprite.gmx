@@ -2,15 +2,15 @@
 <sprite>
   <type>0</type>
   <xorig>40</xorig>
-  <yorigin>36</yorigin>
+  <yorigin>60</yorigin>
   <colkind>1</colkind>
   <coltolerance>0</coltolerance>
   <sepmasks>0</sepmasks>
   <bboxmode>0</bboxmode>
-  <bbox_left>14</bbox_left>
-  <bbox_right>67</bbox_right>
-  <bbox_top>0</bbox_top>
-  <bbox_bottom>67</bbox_bottom>
+  <bbox_left>8</bbox_left>
+  <bbox_right>73</bbox_right>
+  <bbox_top>14</bbox_top>
+  <bbox_bottom>117</bbox_bottom>
   <HTile>0</HTile>
   <VTile>0</VTile>
   <TextureGroups>
@@ -18,7 +18,7 @@
   </TextureGroups>
   <For3D>0</For3D>
   <width>80</width>
-  <height>68</height>
+  <height>120</height>
   <frames>
     <frame index="0">images\spr_beam_fall_0.png</frame>
     <frame index="1">images\spr_beam_fall_1.png</frame>

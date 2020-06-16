@@ -18,6 +18,7 @@
       <sprite>sprites\spr_kirby_mask</sprite>
       <sprites name="Normal">
         <sprite>sprites\spr_kirby_still</sprite>
+        <sprite>sprites\spr_kirby_thin</sprite>
         <sprite>sprites\spr_kirby_walk</sprite>
         <sprite>sprites\spr_kirby_run</sprite>
         <sprite>sprites\spr_kirby_jump</sprite>
@@ -53,7 +54,10 @@
       <sprite>sprites\sprite38</sprite>
       <sprite>sprites\spr_inhale_range</sprite>
       <sprites name="Beam">
+        <sprite>sprites\spr_beam_intro</sprite>
         <sprite>sprites\spr_beam_still</sprite>
+        <sprite>sprites\spr_beam_walk</sprite>
+        <sprite>sprites\spr_beam_run</sprite>
         <sprite>sprites\spr_beam_duck</sprite>
         <sprite>sprites\spr_beam_slide</sprite>
         <sprite>sprites\spr_beam_slide2</sprite>
@@ -62,8 +66,6 @@
         <sprite>sprites\spr_beam_fall</sprite>
         <sprite>sprites\spr_beam_fall2</sprite>
         <sprite>sprites\spr_beam_bounce</sprite>
-        <sprite>sprites\spr_beam_walk</sprite>
-        <sprite>sprites\spr_beam_run</sprite>
         <sprite>sprites\spr_beam_float</sprite>
         <sprite>sprites\spr_beam_puff</sprite>
         <sprite>sprites\sprite64</sprite>
@@ -83,7 +85,6 @@
       <sprite>sprites\spr_waddle_dee</sprite>
       <sprite>sprites\spr_waddle_dee_hurt</sprite>
       <sprite>sprites\spr_waddle_doo</sprite>
-      <sprite>sprites\sprite69</sprite>
       <sprite>sprites\spr_waddle_doo_hurt</sprite>
     </sprites>
     <sprites name="Map">
@@ -98,6 +99,7 @@
   <backgrounds name="background">
     <backgrounds name="Tileset">
       <background>background\bg_field</background>
+      <background>background\background1</background>
     </backgrounds>
   </backgrounds>
   <paths name="paths"/>

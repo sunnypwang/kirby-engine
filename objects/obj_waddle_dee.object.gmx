@@ -27,7 +27,7 @@
             <kind>1</kind>
             <string>///Inherit parent event
 //event_inherited()
-EnemyCreate(2,3,spr_waddle_dee_hurt)
+EnemyCreate(2,3)
 
 </string>
           </argument>
