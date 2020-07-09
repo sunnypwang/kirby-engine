@@ -39,7 +39,7 @@ global.MASTER_DS = ds_list_create()
 
 #define InitSprites
 ///InitSprites()
-global.kirby_state = CreateArray('still','walk','run','jump','fall','fall2','bounce','skid','float','puff','duck','slide','slide2','inhale','inhale2','exhaust','stuffing','dead','big_still','big_walk','big_jump','big_fall','big_duck','big_skid','spit','spit2','swallow')
+global.kirby_state = CreateArray('still','walk','run','jump','fall','fall2','bounce','skid','float','puff','duck','slide','slide2','inhale','inhale2','exhaust','stuffing','hurt','dead','big_still','big_walk','big_jump','big_fall','big_duck','big_skid','spit','spit2','swallow')
 global.ability_state = CreateArray('still','walk','run','jump','fall','fall2','bounce','skid','float','puff','duck','slide','slide2','attack')
 global.abilities = CreateArray('kirby','beam')
 

@@ -29,7 +29,7 @@
 
 //Platforming constants
 WALK_SPD = 6
-DASH_SPD = 8
+DASH_SPD = 9
 SLIDING_SPD = 12
 FLOAT_SPD = 6
 BOUNCE_SPD = 12  //can go up 1 block
@@ -85,11 +85,11 @@ inhale_range_obj = noone    //inhale range object
 transformable = false
 ability = -1
 invincible = false
+can_move = true
 
 depth = global.player_depth
 
 //Player states
-
 jumping = 0
 skidding = 0
 dashing = 0
@@ -98,6 +98,7 @@ falling = 0
 puffing = 0
 ducking = 0
 sliding = 0
+hurting = 0
 
 //Inhaling states
 //inhaling &gt; inhaling_enemy &gt; stuffing &gt; stuffed
@@ -204,7 +205,7 @@ SPRITES = global.DS_SPRITES_KIRBY  //SPRITES is a ds_map that contains sprite na
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///This timer is shared between spitting star / swallowing
+            <string>///This timer is shared between spitting star / swallowing / exhausting
 
 //for spitting event
 if(spitting){
@@ -213,11 +214,15 @@ if(spitting){
 }
 
 //for swallowing event
-else if(swallowing){
+if(swallowing){
     swallowing = false
     stuffed = false
 }
 
+//for exhausting event
+if(exhausting){
+    exhausting = 0
+}
 </string>
           </argument>
         </arguments>
@@ -240,8 +245,9 @@ else if(swallowing){
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>///Finished exhausting
-exhausting = 0
+            <string>///Stop invincibility
+invincible = false
+hurting = 0
 </string>
           </argument>
         </arguments>
@@ -834,7 +840,11 @@ if (is_moving){
           <argument>
             <kind>1</kind>
             <string>if(not invincible){
-    alarm
+    invincible = true
+    alarm[4] = 60
+    hp = hp - 1
+    hurting = 1
+    hsp = -dir * 6
 }
 </string>
           </argument>
@@ -970,7 +980,7 @@ if (ability_obj){
           <argument>
             <kind>1</kind>
             <string>///Action Button (puffing, sliding, inhaling, attacking)
-if(key_just_action){
+if(key_just_action and not (exhausting)){
     //if floating, return to normal state
     if(floating and not puffing){
         event_user(0)   //Puffing event
@@ -1005,7 +1015,7 @@ if(key_action){
     }
     if(inhaling and not inhaling_enemy and action_hold_time &gt; EXHAUST_THRESHOLD){
         exhausting = 1
-        alarm[4] = EXHAUST_TIMER
+        alarm[5] = EXHAUST_TIMER
         inhaling = 0
         if(instance_exists(inhale_range_obj)) instance_destroy(inhale_range_obj)
     }
@@ -1216,7 +1226,10 @@ start_image_index = 0
 
 //if no something in mouth, use normal sprite
 if(not stuffed){
-    if (inhaling){
+    if (hurting) {
+        sprite_index = SPRITES[? 'hurt']
+        image_speed = 0
+    } else if (inhaling){
         if(stuffing) sprite_index = SPRITES[? 'stuffing']
         else if(inhaling == 2) sprite_index = SPRITES[? 'inhale2']
         else sprite_index = SPRITES[? 'inhale']
@@ -1325,7 +1338,7 @@ image_index = start_image_index  //default should be 0
 draw_self()
 
 //Debug stuffs
-draw_debug_text(hsp,vsp,on_ground,falling,x,y,inhaling,sprite_get_name(sprite_index))
+draw_debug_text(hsp,vsp,on_ground,falling,x,y,inhaling,sprite_get_name(sprite_index),hp)
 
 state = ''
 

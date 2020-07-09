@@ -37,6 +37,7 @@
         <sprite>sprites\spr_kirby_inhale2</sprite>
         <sprite>sprites\spr_kirby_stuffing</sprite>
         <sprite>sprites\spr_kirby_exhaust</sprite>
+        <sprite>sprites\spr_kirby_hurt</sprite>
         <sprite>sprites\spr_kirby_dead</sprite>
       </sprites>
       <sprites name="Big">
